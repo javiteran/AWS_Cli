@@ -74,7 +74,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --subnet-id $AWS_SUBNET_PUBLIC_ID \
   --user-data file://myuserdata.txt \
   --private-ip-address $AWS_IP_UbuntuServer \
-  --tag-specifications 'ResourceType=instance,Tags=[{Key=webserver,Value=SRIXX-Ubuntu}]'
+  --tag-specifications 'ResourceType=instance,Tags=[{Key=webserver,Value=SRIXX-Ubuntu}]' \
   --query 'Instances[0].InstanceId' \
   --output text)
 

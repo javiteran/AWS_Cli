@@ -18,7 +18,7 @@ AWS_Subred_CIDR_BLOCK=10.22.130.0/24
 AWS_ID_VPC=$(aws ec2 create-vpc \
   --cidr-block $AWS_VPC_CIDR_BLOCK \
   --amazon-provided-ipv6-cidr-block \
-  --tag-specification ResourceType=vpc,Tags=[{Key=Name,Value=SRIXX-vpc}]
+  --tag-specification ResourceType=vpc,Tags=[{Key=Name,Value=SRIXX-vpc}] \
   --query 'Vpc.{VpcId:VpcId}' \
   --output text)
 
@@ -42,7 +42,7 @@ aws ec2 modify-subnet-attribute \
 
 ## Crear un Internet Gateway (Puerta de enlace) con su etiqueta
 AWS_ID_InternetGateway=$(aws ec2 create-internet-gateway \
-  --tag-specifications ResourceType=internet-gateway,Tags=[{Key=Name,Value=SRIXX-igw}]
+  --tag-specifications ResourceType=internet-gateway,Tags=[{Key=Name,Value=SRIXX-igw}] \
   --query 'InternetGateway.{InternetGatewayId:InternetGatewayId}' \
   --output text)
 
