@@ -15,17 +15,17 @@ AWS_IP_WindowsServer=10.22.130.200
 
 ## Create a security group
 aws ec2 create-security-group \
-  --vpc-id $AWS_VPC_ID \
+  --vpc-id $AWS_ID_VPC \
   --group-name myvpc-security-group \
   --description 'My VPC non default security group'
 
 ## Get security group ID's
 AWS_DEFAULT_SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
-  --filters "Name=vpc-id,Values=$AWS_VPC_ID" \
+  --filters "Name=vpc-id,Values=$AWS_ID_VPC" \
   --query 'SecurityGroups[?GroupName == `default`].GroupId' \
   --output text) &&
   AWS_CUSTOM_SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
-  --filters "Name=vpc-id,Values=$AWS_VPC_ID" \
+  --filters "Name=vpc-id,Values=$AWS_ID_VPC" \
   --query 'SecurityGroups[?GroupName == `myvpc-security-group`].GroupId' \
   --output text)
 
@@ -49,18 +49,6 @@ aws ec2 create-tags \
 --tags "Key=Name,Value=myvpc-default-security-group"
 
 
-## Crear datos de usuario para Apache/PHP/Mariadb
-vi myuserdata.txt
------------------------
-#!/bin/bash
-sudo apt update -y
-sudo apt install -y apache2 mariadb-server
-sudo apt install -y php
-sudo systemctl start apache2
-sudo systemctl is-enabled apache2
------------------------
-:wq
-
 
 ## Create an EC2 instance (con una imagen de ubuntu 22.04 del 04/07/2022)
 AWS_AMI_ID=ami-052efd3df9dad4825
@@ -71,8 +59,8 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --key-name vockey \
   --monitoring "Enabled=false" \
   --security-group-ids $AWS_CUSTOM_SECURITY_GROUP_ID \
-  --subnet-id $AWS_SUBNET_PUBLIC_ID \
-  --user-data file://myuserdata.txt \
+  --subnet-id $AWS_ID_SubredPublica \
+  --user-data file://datosusuarioUbuntu.txt \
   --private-ip-address $AWS_IP_UbuntuServer \
   --tag-specifications 'ResourceType=instance,Tags=[{Key=webserver,Value=SRIXX-Ubuntu}]' \
   --query 'Instances[0].InstanceId' \
