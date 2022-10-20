@@ -16,17 +16,18 @@ AWS_IP_WindowsServer=10.22.130.200
 ## Create a security group
 aws ec2 create-security-group \
   --vpc-id $AWS_ID_VPC \
-  --group-name myvpc-security-group \
+  --group-name SRIXX-sg \
   --description 'My VPC non default security group'
 
 ## Get security group ID's
-AWS_DEFAULT_SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
+#AWS_DEFAULT_SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
+#  --filters "Name=vpc-id,Values=$AWS_ID_VPC" \
+#  --query 'SecurityGroups[?GroupName == `default`].GroupId' \
+#  --output text)
+
+AWS_CUSTOM_SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
   --filters "Name=vpc-id,Values=$AWS_ID_VPC" \
-  --query 'SecurityGroups[?GroupName == `default`].GroupId' \
-  --output text) &&
-  AWS_CUSTOM_SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
-  --filters "Name=vpc-id,Values=$AWS_ID_VPC" \
-  --query 'SecurityGroups[?GroupName == `myvpc-security-group`].GroupId' \
+  --query 'SecurityGroups[?GroupName == `SRIXX-sg`].GroupId' \
   --output text)
 
 ## Create security group ingress rules
@@ -43,10 +44,11 @@ aws ec2 authorize-security-group-ingress \
 ## Add a tags to security groups
 aws ec2 create-tags \
 --resources $AWS_CUSTOM_SECURITY_GROUP_ID \
---tags "Key=Name,Value=myvpc-security-group" &&
-aws ec2 create-tags \
---resources $AWS_DEFAULT_SECURITY_GROUP_ID \
---tags "Key=Name,Value=myvpc-default-security-group"
+--tags "Key=Name,Value=SRIXX-sg" 
+
+#aws ec2 create-tags \
+#--resources $AWS_DEFAULT_SECURITY_GROUP_ID \
+#--tags "Key=Name,Value=myvpc-default-security-group"
 
 
 
