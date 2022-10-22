@@ -93,13 +93,13 @@ aws ec2 create-tags \
 echo "Creando grupo de seguridad Ubuntu Server..."
 aws ec2 create-security-group \
   --vpc-id $AWS_ID_VPC \
-  --group-name SRINN-sg \
-  --description 'Grupo de seguridad SRINN-sg'
+  --group-name SRINNus-sg \
+  --description 'Grupo de seguridad SRINNus-sg'
 
 
 AWS_CUSTOM_SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
   --filters "Name=vpc-id,Values=$AWS_ID_VPC" \
-  --query 'SecurityGroups[?GroupName == `SRINN-sg`].GroupId' \
+  --query 'SecurityGroups[?GroupName == `SRINNus-sg`].GroupId' \
   --output text)
 
 ## Abrir los puertos de acceso a la instancia
@@ -115,7 +115,7 @@ aws ec2 authorize-security-group-ingress \
 ## Añadirle etiqueta al grupo de seguridad
 aws ec2 create-tags \
 --resources $AWS_CUSTOM_SECURITY_GROUP_ID \
---tags "Key=Name,Value=SRINN-sg" 
+--tags "Key=Name,Value=SRINNus-sg" 
 
 ###########################################################
 ## Crear una instancia EC2  (con una imagen de ubuntu 22.04 del 04/07/2022)
