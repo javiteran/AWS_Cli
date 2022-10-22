@@ -1,8 +1,10 @@
 ###########################################################
-#      Creación de una VPC, subredes, 
-#      internet gateway y tabla de rutas
-#      Además creará una instancia EC2 Windows Server 2022
-#      con IP elástica
+#       Creación de una VPC, subredes, 
+#       internet gateway y tabla de rutas
+#      Además creará :
+#            - una instancia EC2 Ubuntu Server 22.04
+#            - una instancia EC2 Windows Server 2022
+#      con IPs elásticas
 #      en AWS con AWS CLI
 #
 # Utilizado para AWS Academy Learning Lab
@@ -91,6 +93,87 @@ aws ec2 create-tags \
 
 
 ###########################################################
+###########################################################
+###########################################################
+########## UBUNTU SERVER                   ################
+###########################################################
+###########################################################
+###########################################################
+## Crear un grupo de seguridad Ubuntu Server
+echo "Creando grupo de seguridad Ubuntu Server..."
+aws ec2 create-security-group \
+  --vpc-id $AWS_ID_VPC \
+  --group-name SRINNus-sg \
+  --description 'Grupo de seguridad SRINNus-sg'
+
+
+AWS_CUSTOM_SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
+  --filters "Name=vpc-id,Values=$AWS_ID_VPC" \
+  --query 'SecurityGroups[?GroupName == `SRINNus-sg`].GroupId' \
+  --output text)
+
+## Abrir los puertos de acceso a la instancia
+aws ec2 authorize-security-group-ingress \
+  --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
+  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 22, "ToPort": 22, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow SSH"}]}]'
+
+aws ec2 authorize-security-group-ingress \
+  --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
+  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 80, "ToPort": 80, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow HTTP"}]}]'
+
+
+## Añadirle etiqueta al grupo de seguridad
+aws ec2 create-tags \
+--resources $AWS_CUSTOM_SECURITY_GROUP_ID \
+--tags "Key=Name,Value=SRINNus-sg" 
+
+###########################################################
+## Crear una instancia EC2  (con una imagen de ubuntu 22.04 del 04/07/2022)
+echo "Creando instancia EC2 Ubuntu"
+AWS_AMI_Ubuntu_ID=ami-052efd3df9dad4825
+AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
+  --image-id $AWS_AMI_Ubuntu_ID \
+  --instance-type t2.micro \
+  --key-name vockey \
+  --monitoring "Enabled=false" \
+  --security-group-ids $AWS_CUSTOM_SECURITY_GROUP_ID \
+  --subnet-id $AWS_ID_SubredPublica \
+  --user-data file://datosusuarioUbuntu.txt \
+  --private-ip-address $AWS_IP_UbuntuServer \
+  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=SRINNus}]' \
+  --query 'Instances[0].InstanceId' \
+  --output text)
+
+#echo $AWS_EC2_INSTANCE_ID
+###########################################################
+## Crear IP Estatica para la instancia Ubuntu. (IP elastica)
+echo "Creando IP elastica Ubuntu"
+AWS_IP_Fija_UbuntuServer=$(aws ec2 allocate-address --output text)
+echo $AWS_IP_Fija_UbuntuServer 
+
+## Recuperar AllocationId de la IP elastica
+AWS_IP_Fija_UbuntuServer_AllocationId=$(echo $AWS_IP_Fija_UbuntuServer | awk '{print $1}')
+echo $AWS_IP_Fija_UbuntuServer_AllocationId
+
+## Añadirle etiqueta a la ip elástica de Ubuntu
+aws ec2 create-tags \
+--resources $AWS_IP_Fija_UbuntuServer_AllocationId \
+--tags "Key=Name,Value=SRINNus-ip" 
+
+##########################################################
+## Asociar la ip elastica a la instancia Ubuntu
+echo "Esperando a que la instancia esté disponible para asociar la IP elastica"
+sleep 15
+aws ec2 associate-address --instance-id $AWS_EC2_INSTANCE_ID --allocation-id $AWS_IP_Fija_UbuntuServer_AllocationId
+
+
+
+###########################################################
+###########################################################
+###########################################################
+########## WINDOWS SERVER                  ################
+###########################################################
+###########################################################
 ## Crear un grupo de seguridad Windows Server
 echo "Creando grupo de seguridad Windows Server..."
 aws ec2 create-security-group \
@@ -166,6 +249,8 @@ aws ec2 create-tags \
 echo "Esperando a que la instancia esté disponible para asociar la IP elastica. Tardará 2 minutos..."
 sleep 120
 aws ec2 associate-address --instance-id $AWS_EC2_INSTANCE_ID --allocation-id $AWS_IP_Fija_WindowsServer_AllocationId
+
+
 
 
 ##########################################################

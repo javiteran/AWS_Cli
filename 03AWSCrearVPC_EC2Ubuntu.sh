@@ -1,6 +1,8 @@
 ###########################################################
-#       Creación de una VPC, subredes, 
-#       internet gateway y tabla de rutas
+#      Creación de una VPC, subredes, 
+#      internet gateway y tabla de rutas
+#      Además creará una instancia EC2 Ubuntu Server 22.04
+#      con IP elástica
 #      en AWS con AWS CLI
 #
 # Utilizado para AWS Academy Learning Lab
