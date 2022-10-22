@@ -10,6 +10,12 @@ https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ec2/index.htm
 
 ## Creación de entorno de tareas 00AWSCrearVPC_EC2Win_Ubu.sh
 
+```git
+git clone https://github.com/javiteran/AWS_Cli.git
+cd AWS_Cli
+sh 00AWSCrearVPC_EC2Win_Ubu.sh
+```
+
 Con este fichero se creará el siguiente entorno de tareas:
 
 ![00AWSCrearVPC_EC2Win_Ubu.PNG](imagenes/00AWSCrearVPC_EC2Win_Ubu.PNG)
@@ -24,4 +30,3 @@ Creará:
 * Una instancia EC2 con Windows Server 2022 
 * Una instancia EC2 con Ubuntu Server 22.04
 * Direcciones IPs públicas para las instancias EC2
-
