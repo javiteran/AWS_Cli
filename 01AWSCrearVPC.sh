@@ -1,4 +1,3 @@
-#!/bin/bash
 ###########################################################
 #       Creación de una VPC, subredes, 
 #       internet gateway y tabla de rutas
@@ -87,9 +86,6 @@ aws ec2 create-tags \
 --tags "Key=Name,Value=SRINN-rtb-public"
 
 
-
-
-
 ###########################################################
 ## Crear un grupo de seguridad
 aws ec2 create-security-group \
@@ -130,14 +126,34 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --subnet-id $AWS_ID_SubredPublica \
   --user-data file://datosusuarioUbuntu.txt \
   --private-ip-address $AWS_IP_UbuntuServer \
-  #--tag-specifications 'ResourceType=instance,Tags=[{Key=MiEc2Ubuntu,Value=SRINN-Ubuntu}]' \
+  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=SRINNus}]' \
   --query 'Instances[0].InstanceId' \
   --output text)
 
-echo $AWS_EC2_INSTANCE_ID
+#echo $AWS_EC2_INSTANCE_ID
 ###########################################################
-## Mostrar la ip publica de la instancia
+## Crear IP Estatica para la instancia Ubuntu. (IP elastica)
+AWS_IP_Fija_UbuntuServer=$(aws ec2 allocate-address --output text)
+echo $AWS_IP_Fija_UbuntuServer 
+
+## Recuperar AllocationId de la IP elastica
+AWS_IP_Fija_UbuntuServer_AllocationId=$(echo $AWS_IP_Fija_UbuntuServer | awk '{print $1}')
+echo $AWS_IP_Fija_UbuntuServer_AllocationId
+
+## Añadirle etiqueta a la ip elástica de Ubuntu
+aws ec2 create-tags \
+--resources $AWS_IP_Fija_UbuntuServer_AllocationId \
+--tags "Key=Name,Value=SRINNus-ip" 
+
+##########################################################
+## Asociar la ip elastica a la instancia Ubuntu
+aws ec2 associate-address --instance-id $AWS_EC2_INSTANCE_ID --allocation-id $AWS_IP_Fija_UbuntuServer_AllocationId
+
+
+##########################################################
+## Mostrar las ips publicas de las instancias
 AWS_EC2_INSTANCE_PUBLIC_IP=$(aws ec2 describe-instances \
 --query "Reservations[*].Instances[*].PublicIpAddress" \
 --output=text) &&
 echo $AWS_EC2_INSTANCE_PUBLIC_IP
+##########################################################
