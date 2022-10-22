@@ -1,4 +1,4 @@
-# :dizzy: Creación de entorno de tareas en AWS con CLI
+# :dizzy: Tareas en AWS Academy con AWS CLI
 
 Cuando utilizamos AWS Academy y su learner lab puede interesarnos personalizar el entorno de los alumnos.
 
