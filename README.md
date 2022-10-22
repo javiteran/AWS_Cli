@@ -1,6 +1,10 @@
-# Creación de entorno de tareas en AWS con CLI
+# :dizzy: Creación de entorno de tareas en AWS con CLI
 
-## Referencia de comandos
+Cuando utilizamos AWS Academy y su learner lab puede interesarnos personalizar el entorno de los alumnos.
+
+Muestra una posible solución de automatización de la creación de entornos de tareas en AWS con AWS CLI.
+
+## :gear: Referencia de comandos
 
 https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ec2/index.html#cli-aws-ec2
 
@@ -8,7 +12,7 @@ https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ec2/index.htm
 
 ![ConfigurarEntornoLearnerLab.PNG](imagenes/ConfigurarEntornoLearnerLab.PNG)
 
-## Creación de entorno de tareas 00AWSCrearVPC_EC2Win_Ubu.sh
+## :hammer: Creación de entorno de tareas 00AWSCrearVPC_EC2Win_Ubu.sh
 
 ```git
 git clone https://github.com/javiteran/AWS_Cli.git
