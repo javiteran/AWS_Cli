@@ -1,3 +1,4 @@
+#!/bin/bash
 ###########################################################
 #       Creación de una instancia EC2
 #       con sus grupos de seguridad y puertos abiertos
@@ -8,7 +9,6 @@
 # Autor: Javier Terán González
 # Fecha: 20/10/2022
 ###########################################################
-
 
 AWS_IP_UbuntuServer=10.22.130.100
 AWS_IP_WindowsServer=10.22.130.200

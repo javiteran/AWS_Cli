@@ -1,3 +1,4 @@
+#!/bin/bash
 ###########################################################
 #       Creación de una VPC, subredes, 
 #       internet gateway y tabla de rutas
@@ -20,7 +21,7 @@ AWS_IP_WindowsServer=10.22.130.200
 AWS_ID_VPC=$(aws ec2 create-vpc \
   --cidr-block $AWS_VPC_CIDR_BLOCK \
   --amazon-provided-ipv6-cidr-block \
-  --tag-specification ResourceType=vpc,Tags=[{Key=Name,Value=SRIXX-vpc}] \
+  --tag-specification ResourceType=vpc,Tags=[{Key=Name,Value=SRINN-vpc}] \
   --query 'Vpc.{VpcId:VpcId}' \
   --output text)
 
@@ -33,7 +34,7 @@ aws ec2 modify-vpc-attribute \
 AWS_ID_SubredPublica=$(aws ec2 create-subnet \
   --vpc-id $AWS_ID_VPC --cidr-block $AWS_Subred_CIDR_BLOCK \
   --availability-zone us-east-1a \
-  --tag-specifications ResourceType=subnet,Tags=[{Key=Name,Value=SRIXX-subred-publica}] \
+  --tag-specifications ResourceType=subnet,Tags=[{Key=Name,Value=SRINN-subred-publica}] \
   --query 'Subnet.{SubnetId:SubnetId}' \
   --output text)
 
@@ -44,7 +45,7 @@ aws ec2 modify-subnet-attribute \
 
 ## Crear un Internet Gateway (Puerta de enlace) con su etiqueta
 AWS_ID_InternetGateway=$(aws ec2 create-internet-gateway \
-  --tag-specifications ResourceType=internet-gateway,Tags=[{Key=Name,Value=SRIXX-igw}] \
+  --tag-specifications ResourceType=internet-gateway,Tags=[{Key=Name,Value=SRINN-igw}] \
   --query 'InternetGateway.{InternetGatewayId:InternetGatewayId}' \
   --output text)
 
@@ -78,35 +79,34 @@ AWS_DEFAULT_ROUTE_TABLE_ID=$(aws ec2 describe-route-tables \
   --output text) &&
 aws ec2 create-tags \
 --resources $AWS_DEFAULT_ROUTE_TABLE_ID \
---tags "Key=Name,Value=SRIXX ruta por defecto"
+--tags "Key=Name,Value=SRINN ruta por defecto"
 
 ## Añadir etiquetas a la tabla de rutas
 aws ec2 create-tags \
 --resources $AWS_ID_TablaRutas \
---tags "Key=Name,Value=SRIXX-rtb-public"
+--tags "Key=Name,Value=SRINN-rtb-public"
 
 
 
 
 
-####################################
-
+###########################################################
 ## Crear un grupo de seguridad
 aws ec2 create-security-group \
   --vpc-id $AWS_ID_VPC \
-  --group-name SRIXX-sg \
-  --description 'My VPC non default security group'
+  --group-name SRINN-sg \
+  --description 'Grupo de seguridad SRINN-sg'
 
 
 AWS_CUSTOM_SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
   --filters "Name=vpc-id,Values=$AWS_ID_VPC" \
-  --query 'SecurityGroups[?GroupName == `SRIXX-sg`].GroupId' \
+  --query 'SecurityGroups[?GroupName == `SRINN-sg`].GroupId' \
   --output text)
 
 ## Abrir los puertos de acceso a la instancia
 aws ec2 authorize-security-group-ingress \
   --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
-  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 22, "ToPort": 22, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow SSH"}]}]' &&
+  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 22, "ToPort": 22, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow SSH"}]}]'
 
 aws ec2 authorize-security-group-ingress \
   --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
@@ -116,9 +116,9 @@ aws ec2 authorize-security-group-ingress \
 ## Añadirle etiqueta al grupo de seguridad
 aws ec2 create-tags \
 --resources $AWS_CUSTOM_SECURITY_GROUP_ID \
---tags "Key=Name,Value=SRIXX-sg" 
+--tags "Key=Name,Value=SRINN-sg" 
 
-
+###########################################################
 ## Crear una instancia EC2  (con una imagen de ubuntu 22.04 del 04/07/2022)
 AWS_AMI_ID=ami-052efd3df9dad4825
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
@@ -130,15 +130,14 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --subnet-id $AWS_ID_SubredPublica \
   --user-data file://datosusuarioUbuntu.txt \
   --private-ip-address $AWS_IP_UbuntuServer \
-  --tag-specifications 'ResourceType=instance,Tags=[{Key=webserver,Value=SRIXX-Ubuntu}]' \
+  #--tag-specifications 'ResourceType=instance,Tags=[{Key=MiEc2Ubuntu,Value=SRINN-Ubuntu}]' \
   --query 'Instances[0].InstanceId' \
   --output text)
 
+echo $AWS_EC2_INSTANCE_ID
+###########################################################
 ## Mostrar la ip publica de la instancia
 AWS_EC2_INSTANCE_PUBLIC_IP=$(aws ec2 describe-instances \
 --query "Reservations[*].Instances[*].PublicIpAddress" \
 --output=text) &&
 echo $AWS_EC2_INSTANCE_PUBLIC_IP
-
-
-aws ec2 describe-addresses
