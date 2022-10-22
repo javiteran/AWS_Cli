@@ -6,7 +6,7 @@
 # Utilizado para AWS Academy Learning Lab
 #
 # Autor: Javier Terán González
-# Fecha: 18/10/2022
+# Fecha: 22/10/2022
 ###########################################################
 
 ## Definición de variables
@@ -89,8 +89,8 @@ aws ec2 create-tags \
 
 
 ###########################################################
-## Crear un grupo de seguridad Ubuntu Server
-echo "Creando grupo de seguridad Ubuntu Server..."
+## Crear un grupo de seguridad Windows Server
+echo "Creando grupo de seguridad Windows Server..."
 aws ec2 create-security-group \
   --vpc-id $AWS_ID_VPC \
   --group-name SRINN-sg \
@@ -105,7 +105,16 @@ AWS_CUSTOM_SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
 ## Abrir los puertos de acceso a la instancia
 aws ec2 authorize-security-group-ingress \
   --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
-  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 22, "ToPort": 22, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow SSH"}]}]'
+  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 3389, "ToPort": 3389, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow RDP"}]}]'
+
+aws ec2 authorize-security-group-ingress \
+  --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
+  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 53, "ToPort": 53, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow DNS(TCP)"}]}]'
+
+aws ec2 authorize-security-group-ingress \
+  --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
+  --ip-permissions '[{"IpProtocol": "UDP", "FromPort": 53, "ToPort": 53, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow DNS(UDP)"}]}]'
+
 
 aws ec2 authorize-security-group-ingress \
   --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
@@ -118,43 +127,43 @@ aws ec2 create-tags \
 --tags "Key=Name,Value=SRINN-sg" 
 
 ###########################################################
-## Crear una instancia EC2  (con una imagen de ubuntu 22.04 del 04/07/2022)
-echo "Creando instancia EC2 Ubuntu"
-AWS_AMI_Ubuntu_ID=ami-052efd3df9dad4825
+## Crear una instancia EC2  (con una imagen de Windows 22.04 del 22/10/2022)
+echo "Creando instancia EC2 Windows"
+AWS_AMI_Windows_ID=ami-07a53499a088e4a8c
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
-  --image-id $AWS_AMI_Ubuntu_ID \
+  --image-id $AWS_AMI_Windows_ID \
   --instance-type t2.micro \
   --key-name vockey \
   --monitoring "Enabled=false" \
   --security-group-ids $AWS_CUSTOM_SECURITY_GROUP_ID \
   --subnet-id $AWS_ID_SubredPublica \
-  --user-data file://datosusuarioUbuntu.txt \
-  --private-ip-address $AWS_IP_UbuntuServer \
-  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=SRINNus}]' \
+  --user-data file://datosusuarioWindows.txt \
+  --private-ip-address $AWS_IP_WindowsServer \
+  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=SRINNws}]' \
   --query 'Instances[0].InstanceId' \
   --output text)
 
 #echo $AWS_EC2_INSTANCE_ID
 ###########################################################
-## Crear IP Estatica para la instancia Ubuntu. (IP elastica)
-echo "Creando IP elastica Ubuntu"
-AWS_IP_Fija_UbuntuServer=$(aws ec2 allocate-address --output text)
-echo $AWS_IP_Fija_UbuntuServer 
+## Crear IP Estatica para la instancia Windows. (IP elastica)
+echo "Creando IP elastica Windows"
+AWS_IP_Fija_WindowsServer=$(aws ec2 allocate-address --output text)
+echo $AWS_IP_Fija_WindowsServer 
 
 ## Recuperar AllocationId de la IP elastica
-AWS_IP_Fija_UbuntuServer_AllocationId=$(echo $AWS_IP_Fija_UbuntuServer | awk '{print $1}')
-echo $AWS_IP_Fija_UbuntuServer_AllocationId
+AWS_IP_Fija_WindowsServer_AllocationId=$(echo $AWS_IP_Fija_WindowsServer | awk '{print $1}')
+echo $AWS_IP_Fija_WindowsServer_AllocationId
 
-## Añadirle etiqueta a la ip elástica de Ubuntu
+## Añadirle etiqueta a la ip elástica de Windows
 aws ec2 create-tags \
---resources $AWS_IP_Fija_UbuntuServer_AllocationId \
---tags "Key=Name,Value=SRINNus-ip" 
+--resources $AWS_IP_Fija_WindowsServer_AllocationId \
+--tags "Key=Name,Value=SRINNws-ip" 
 
 ##########################################################
-## Asociar la ip elastica a la instancia Ubuntu
+## Asociar la ip elastica a la instancia Windows
 echo "Esperando a que la instancia esté disponible para asociar la IP elastica"
 sleep 15
-aws ec2 associate-address --instance-id $AWS_EC2_INSTANCE_ID --allocation-id $AWS_IP_Fija_UbuntuServer_AllocationId
+aws ec2 associate-address --instance-id $AWS_EC2_INSTANCE_ID --allocation-id $AWS_IP_Fija_WindowsServer_AllocationId
 
 
 ##########################################################

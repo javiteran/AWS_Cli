@@ -6,7 +6,7 @@
 # Utilizado para AWS Academy Learning Lab
 #
 # Autor: Javier Terán González
-# Fecha: 18/10/2022
+# Fecha: 22/10/2022
 ###########################################################
 
 ## Definición de variables
