@@ -8,7 +8,7 @@ Muestra una posible solución de automatización de la creación de entornos de 
 
 https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ec2/index.html#cli-aws-ec2
 
-## Configuración del entorno en el Learner Lab
+## :collision: Configuración del entorno en el Learner Lab
 
 ![ConfigurarEntornoLearnerLab.PNG](imagenes/ConfigurarEntornoLearnerLab.PNG)
 
