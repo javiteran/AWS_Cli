@@ -163,7 +163,7 @@ aws ec2 create-tags \
 ##########################################################
 ## Asociar la ip elastica a la instancia Ubuntu
 echo "Esperando a que la instancia esté disponible para asociar la IP elastica"
-sleep 15
+sleep 100
 aws ec2 associate-address --instance-id $AWS_EC2_INSTANCE_ID --allocation-id $AWS_IP_Fija_UbuntuServer_AllocationId
 
 
