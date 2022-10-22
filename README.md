@@ -4,7 +4,7 @@ Cuando utilizamos AWS Academy y su learner lab puede interesarnos personalizar e
 
 Muestra una posible solución de automatización de la creación de entornos de tareas en AWS con AWS CLI.
 
-## :gear: Referencia de comandos
+## :gear: Referencia de comandos AWS CLI
 
 https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ec2/index.html#cli-aws-ec2
 
