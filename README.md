@@ -34,3 +34,8 @@ Creará:
 * Una instancia EC2 con Windows Server 2022 
 * Una instancia EC2 con Ubuntu Server 22.04
 * Direcciones IPs públicas para las instancias EC2
+
+## Hacer lo mismo con Python3 y Boto3
+
+Puedes buscar documentación para hacer los mismo con python3 en la siguiente imagen.
+https://boto3.amazonaws.com/v1/documentation/api/latest/guide/examples.html
