@@ -177,7 +177,6 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --subnet-id $AWS_ID_SubredPublica \
   --user-data file://datosusuarioUbuntu.txt \
   --private-ip-address $AWS_IP_UbuntuServer \
-  --assign-ipv6-address-on-creation \
   --tag-specifications ResourceType=instance,Tags=[{Key=Name,Value=$AWS_Proyecto-us}] \
   --query 'Instances[0].InstanceId' \
   --output text)
