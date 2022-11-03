@@ -156,7 +156,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --subnet-id $AWS_ID_SubredPublica \
   --user-data file://datosusuarioUbuntu.txt \
   --private-ip-address $AWS_IP_UbuntuServer \
-  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=$AWS_Proyecto-us}]' \
+  --tag-specifications ResourceType=instance,Tags=[{Key=Name,Value=$AWS_Proyecto-us}] \
   --query 'Instances[0].InstanceId' \
   --output text)
 
@@ -174,7 +174,7 @@ echo $AWS_IP_Fija_UbuntuServer_AllocationId
 ## Añadirle etiqueta a la ip elástica de Ubuntu
 aws ec2 create-tags \
 --resources $AWS_IP_Fija_UbuntuServer_AllocationId \
---tags "Key=Name,Value=$AWS_Proyecto-us-ip" 
+--tags Key=Name,Value=$AWS_Proyecto-us-ip
 
 ##########################################################
 ## Asociar la ip elastica a la instancia Ubuntu
@@ -240,7 +240,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --subnet-id $AWS_ID_SubredPublica \
   --user-data file://datosusuarioWindows.txt \
   --private-ip-address $AWS_IP_WindowsServer \
-  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=$AWS_Proyecto-ws}]' \
+  --tag-specifications ResourceType=instance,Tags=[{Key=Name,Value=$AWS_Proyecto-ws}] \
   --query 'Instances[0].InstanceId' \
   --output text)
 
