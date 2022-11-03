@@ -112,13 +112,13 @@ aws ec2 create-tags \
 echo "Creando grupo de seguridad Ubuntu Server..."
 aws ec2 create-security-group \
   --vpc-id $AWS_ID_VPC \
-  --group-name $AWS_Proyectous-sg \
-  --description 'Grupo de seguridad $AWS_Proyectous-sg'
+  --group-name $AWS_Proyecto-us-sg \
+  --description 'Grupo de seguridad $AWS_Proyecto-us-sg'
 
 
 AWS_CUSTOM_SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
   --filters "Name=vpc-id,Values=$AWS_ID_VPC" \
-  --query 'SecurityGroups[?GroupName == `$AWS_Proyectous-sg`].GroupId' \
+  --query 'SecurityGroups[?GroupName == `$AWS_Proyecto-us-sg`].GroupId' \
   --output text)
 
 ## Abrir los puertos de acceso a la instancia
@@ -141,7 +141,7 @@ aws ec2 authorize-security-group-ingress \
 ## Añadirle etiqueta al grupo de seguridad
 aws ec2 create-tags \
 --resources $AWS_CUSTOM_SECURITY_GROUP_ID \
---tags "Key=Name,Value=$AWS_Proyectous-sg" 
+--tags "Key=Name,Value=$AWS_Proyecto-us-sg" 
 
 ###########################################################
 ## Crear una instancia EC2  (con una imagen de ubuntu 22.04 del 04/07/2022)
@@ -156,7 +156,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --subnet-id $AWS_ID_SubredPublica \
   --user-data file://datosusuarioUbuntu.txt \
   --private-ip-address $AWS_IP_UbuntuServer \
-  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=$AWS_Proyectous}]' \
+  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=$AWS_Proyecto-us}]' \
   --query 'Instances[0].InstanceId' \
   --output text)
 
@@ -174,7 +174,7 @@ echo $AWS_IP_Fija_UbuntuServer_AllocationId
 ## Añadirle etiqueta a la ip elástica de Ubuntu
 aws ec2 create-tags \
 --resources $AWS_IP_Fija_UbuntuServer_AllocationId \
---tags "Key=Name,Value=$AWS_Proyectous-ip" 
+--tags "Key=Name,Value=$AWS_Proyecto-us-ip" 
 
 ##########################################################
 ## Asociar la ip elastica a la instancia Ubuntu
@@ -194,13 +194,13 @@ aws ec2 associate-address --instance-id $AWS_EC2_INSTANCE_ID --allocation-id $AW
 echo "Creando grupo de seguridad Windows Server..."
 aws ec2 create-security-group \
   --vpc-id $AWS_ID_VPC \
-  --group-name $AWS_Proyectows-sg \
-  --description 'Grupo de seguridad $AWS_Proyectows-sg'
+  --group-name $AWS_Proyecto-ws-sg \
+  --description 'Grupo de seguridad $AWS_Proyecto-ws-sg'
 
 
 AWS_CUSTOM_SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
   --filters "Name=vpc-id,Values=$AWS_ID_VPC" \
-  --query 'SecurityGroups[?GroupName == `$AWS_Proyectows-sg`].GroupId' \
+  --query 'SecurityGroups[?GroupName == `$AWS_Proyecto-ws-sg`].GroupId' \
   --output text)
 
 ## Abrir los puertos de acceso a la instancia
@@ -225,7 +225,7 @@ aws ec2 authorize-security-group-ingress \
 ## Añadirle etiqueta al grupo de seguridad
 aws ec2 create-tags \
 --resources $AWS_CUSTOM_SECURITY_GROUP_ID \
---tags "Key=Name,Value=$AWS_Proyectows-sg" 
+--tags "Key=Name,Value=$AWS_Proyecto-ws-sg" 
 
 ###########################################################
 ## Crear una instancia EC2  (con una imagen de Windows 22.04 del 22/10/2022)
@@ -240,7 +240,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --subnet-id $AWS_ID_SubredPublica \
   --user-data file://datosusuarioWindows.txt \
   --private-ip-address $AWS_IP_WindowsServer \
-  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=$AWS_Proyectows}]' \
+  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=$AWS_Proyecto-ws}]' \
   --query 'Instances[0].InstanceId' \
   --output text)
 
@@ -258,7 +258,7 @@ echo $AWS_IP_Fija_WindowsServer_AllocationId
 ## Añadirle etiqueta a la ip elástica de Windows
 aws ec2 create-tags \
 --resources $AWS_IP_Fija_WindowsServer_AllocationId \
---tags "Key=Name,Value=$AWS_Proyectows-ip" 
+--tags "Key=Name,Value=$AWS_Proyecto-ws-ip" 
 
 ##########################################################
 ## Asociar la ip elastica a la instancia Windows
