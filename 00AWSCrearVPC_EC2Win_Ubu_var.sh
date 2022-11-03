@@ -210,16 +210,15 @@ aws ec2 authorize-security-group-ingress \
 
 aws ec2 authorize-security-group-ingress \
   --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
-  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 53, "ToPort": 53, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow DNS(TCP)"}]}]'
+  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 53,   "ToPort": 53,   "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow DNS(TCP)"}]}]'
 
 aws ec2 authorize-security-group-ingress \
   --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
-  --ip-permissions '[{"IpProtocol": "UDP", "FromPort": 53, "ToPort": 53, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow DNS(UDP)"}]}]'
-
+  --ip-permissions '[{"IpProtocol": "UDP", "FromPort": 53,   "ToPort": 53,   "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow DNS(UDP)"}]}]'
 
 aws ec2 authorize-security-group-ingress \
   --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
-  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 80, "ToPort": 80, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow HTTP"}]}]'
+  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 80,   "ToPort": 80,   "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow HTTP"}]}]'
 
 
 ## Añadirle etiqueta al grupo de seguridad
