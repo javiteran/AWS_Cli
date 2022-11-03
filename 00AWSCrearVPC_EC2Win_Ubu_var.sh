@@ -150,7 +150,8 @@ aws ec2 create-tags \
 
 ###############################################################################
 ## Crear una instancia EC2  (con una imagen de ubuntu 22.04 del 04/07/2022)
-echo "Creando instancia EC2 Ubuntu"
+echo ""
+echo "Creando instancia EC2 Ubuntu  ##################################"
 AWS_AMI_Ubuntu_ID=ami-052efd3df9dad4825
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Ubuntu_ID \
@@ -234,7 +235,8 @@ aws ec2 create-tags \
 
 ###############################################################################
 ## Crear una instancia EC2  (con una imagen de Windows 22.04 del 22/10/2022)
-echo "Creando instancia EC2 Windows"
+echo ""
+echo "Creando instancia EC2 Windows  ##################################"
 AWS_AMI_Windows_ID=ami-07a53499a088e4a8c
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Windows_ID \
@@ -272,6 +274,18 @@ sleep 120
 aws ec2 associate-address --instance-id $AWS_EC2_INSTANCE_ID --allocation-id $AWS_IP_Fija_WindowsServer_AllocationId
 
 
+
+###############################################################################
+echo "Permitir todo el tráfico entre los grupos de seguridad de las instancias"
+aws ec2 authorize-security-group-ingress \
+  --group-id $AWS_ID_GrupoSeguridad_Ubuntu \
+  --source-group $AWS_ID_GrupoSeguridad_Windows \
+  --protocol all
+
+aws ec2 authorize-security-group-ingress \
+  --group-id $AWS_ID_GrupoSeguridad_Windows \
+  --source-group $AWS_ID_GrupoSeguridad_Ubuntu \
+  --protocol all
 ###############################################################################
 ## Mostrar las ips publicas de las instancias
 echo "Mostrando las ips publicas de las instancias"
