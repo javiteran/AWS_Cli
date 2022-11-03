@@ -113,14 +113,15 @@ echo "Creando grupo de seguridad Ubuntu Server..."
 aws ec2 create-security-group \
   --vpc-id $AWS_ID_VPC \
   --group-name $AWS_Proyecto-us-sg \
-  --description 'Grupo de seguridad $AWS_Proyecto-us-sg'
+  --description "$AWS_Proyecto-us-sg"
 
-
+echo "Obteniendo ID del grupo de seguridad Ubuntu Server..."
 AWS_CUSTOM_SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
   --filters "Name=vpc-id,Values=$AWS_ID_VPC" \
   --query 'SecurityGroups[?GroupName == `$AWS_Proyecto-us-sg`].GroupId' \
   --output text)
 
+echo "Añadiendo reglas de seguridad al grupo de seguridad Ubuntu Server..."
 ## Abrir los puertos de acceso a la instancia
 aws ec2 authorize-security-group-ingress \
   --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
@@ -139,6 +140,7 @@ aws ec2 authorize-security-group-ingress \
   --ip-permissions '[{"IpProtocol": "UDP", "FromPort": 53, "ToPort": 53, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow DNS(UDP)"}]}]'
 
 ## Añadirle etiqueta al grupo de seguridad
+echo "Añadiendo etiqueta al grupo de seguridad Ubuntu Server..."
 aws ec2 create-tags \
 --resources $AWS_CUSTOM_SECURITY_GROUP_ID \
 --tags "Key=Name,Value=$AWS_Proyecto-us-sg" 
@@ -195,15 +197,16 @@ echo "Creando grupo de seguridad Windows Server..."
 aws ec2 create-security-group \
   --vpc-id $AWS_ID_VPC \
   --group-name $AWS_Proyecto-ws-sg \
-  --description 'Grupo de seguridad $AWS_Proyecto-ws-sg'
+  --description "$AWS_Proyecto-ws-sg"
 
-
+echo "Obteniendo ID del grupo de seguridad Windows Server..."
 AWS_CUSTOM_SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
   --filters "Name=vpc-id,Values=$AWS_ID_VPC" \
-  --query 'SecurityGroups[?GroupName == `$AWS_Proyecto-ws-sg`].GroupId' \
+  --query 'SecurityGroups[?GroupName == $AWS_Proyecto-ws-sg].GroupId' \
   --output text)
 
 ## Abrir los puertos de acceso a la instancia
+echo "Añadiendo reglas de seguridad al grupo de seguridad Windows Server..."
 aws ec2 authorize-security-group-ingress \
   --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
   --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 3389, "ToPort": 3389, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow RDP"}]}]'
@@ -222,6 +225,7 @@ aws ec2 authorize-security-group-ingress \
 
 
 ## Añadirle etiqueta al grupo de seguridad
+echo "Añadiendo etiqueta al grupo de seguridad Windows Server..."
 aws ec2 create-tags \
 --resources $AWS_CUSTOM_SECURITY_GROUP_ID \
 --tags "Key=Name,Value=$AWS_Proyecto-ws-sg" 
