@@ -22,12 +22,12 @@ AWS_IP_WindowsServer=10.22.1$NN.200
 AWS_Proyecto=SRI$NN
 
 echo "Se van a crear con los siguientes valores:"
-echo "Alumno: "               $NN
-echo "AWS_VPC_CIDR_BLOCK: "   $AWS_VPC_CIDR_BLOCK
-echo "AWS_Subred_CIDR_BLOCK:" $AWS_Subred_CIDR_BLOCK
-echo "AWS_IP_UbuntuServer: "  $AWS_IP_UbuntuServer
-echo "AWS_IP_WindowsServer: " $AWS_IP_WindowsServer
-echo "AWS_Proyecto: "         $AWS_Proyecto
+echo "Alumno: "                $NN
+echo "AWS_VPC_CIDR_BLOCK: "    $AWS_VPC_CIDR_BLOCK
+echo "AWS_Subred_CIDR_BLOCK: " $AWS_Subred_CIDR_BLOCK
+echo "AWS_IP_UbuntuServer: "   $AWS_IP_UbuntuServer
+echo "AWS_IP_WindowsServer: "  $AWS_IP_WindowsServer
+echo "AWS_Proyecto: "          $AWS_Proyecto
 ###########################################################
 ## Crear una VPC (Virtual Private Cloud) con su etiqueta
 ## La VPC tendrá un bloque IPv4 proporcionado por el usuario y uno IPv6 de AWS ???
@@ -230,7 +230,7 @@ aws ec2 authorize-security-group-ingress \
 ## Añadirle etiqueta al grupo de seguridad
 echo "Añadiendo etiqueta al grupo de seguridad Windows Server..."
 aws ec2 create-tags \
---resources $AWS_CUSTOM_SECURITY_GROUP_ID \
+--resources $AWS_ID_GrupoSeguridad_Windows \
 --tags "Key=Name,Value=$AWS_Proyecto-ws-sg" 
 
 ###########################################################
@@ -242,7 +242,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --instance-type t2.micro \
   --key-name vockey \
   --monitoring "Enabled=false" \
-  --security-group-ids $AWS_CUSTOM_SECURITY_GROUP_ID \
+  --security-group-ids $AWS_ID_GrupoSeguridad_Windows \
   --subnet-id $AWS_ID_SubredPublica \
   --user-data file://datosusuarioWindows.txt \
   --private-ip-address $AWS_IP_WindowsServer \
