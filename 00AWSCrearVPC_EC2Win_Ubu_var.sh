@@ -23,7 +23,7 @@ AWS_IP_UbuntuServer=10.22.1$NN.100
 AWS_IP_WindowsServer=10.22.1$NN.200
 AWS_Proyecto=SRI$NN
 
-echo "##################################################################"
+echo "######################################################################"
 echo "Creación de una VPC, subredes, internet gateway y tabla de rutas."
 echo "Además creará una instancia EC2 Ubuntu Server 22.04 y una instancia EC2 Windows Server 2022 con IPs elásticas en AWS con AWS CLI"
 echo "Se van a crear con los siguientes valores:"
@@ -33,11 +33,11 @@ echo "AWS_Subred_CIDR_BLOCK: " $AWS_Subred_CIDR_BLOCK
 echo "AWS_IP_UbuntuServer:   " $AWS_IP_UbuntuServer
 echo "AWS_IP_WindowsServer:  " $AWS_IP_WindowsServer
 echo "AWS_Proyecto:          " $AWS_Proyecto
-echo "##################################################################"
+echo "######################################################################"
 ###############################################################################
 ## Crear una VPC (Virtual Private Cloud) con su etiqueta
 ## La VPC tendrá un bloque IPv4 proporcionado por el usuario y uno IPv6 de AWS ???
-echo "############## Crear VPC, Subred, Rutas, Gateway ####################"
+echo "############## Crear VPC, Subred, Rutas, Gateway #####################"
 echo "######################################################################"
 echo "Creando VPC..."
 
@@ -86,10 +86,17 @@ AWS_ID_TablaRutas=$(aws ec2 create-route-table \
 --query 'RouteTable.{RouteTableId:RouteTableId}' \
 --output text )
 
-## Crear la ruta por defecto a la puerta de enlace (Internet Gateway)
+## Crear la ruta por defecto a la puerta de enlace IPv4 (Internet Gateway)
+echo "     Ruta por defecto IPv4 0.0.0.0/0..."
 aws ec2 create-route \
   --route-table-id $AWS_ID_TablaRutas \
   --destination-cidr-block 0.0.0.0/0 \
+  --gateway-id $AWS_ID_InternetGateway
+
+## Crear la ruta por defecto a la puerta de enlace IPv4 (Internet Gateway)
+echo "     Ruta por defecto IPv6 ::/0..."
+aws ec2 create-route --route-table-id  $AWS_ID_TablaRutas \
+  --destination-ipv6-cidr-block ::/0 \
   --gateway-id $AWS_ID_InternetGateway
 
 ## Asociar la subred pública con la tabla de rutas
@@ -170,6 +177,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --subnet-id $AWS_ID_SubredPublica \
   --user-data file://datosusuarioUbuntu.txt \
   --private-ip-address $AWS_IP_UbuntuServer \
+  --assign-ipv6-address-on-creation \
   --tag-specifications ResourceType=instance,Tags=[{Key=Name,Value=$AWS_Proyecto-us}] \
   --query 'Instances[0].InstanceId' \
   --output text)
