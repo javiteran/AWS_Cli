@@ -261,6 +261,8 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --query 'Instances[0].InstanceId' \
   --output text)
 
+#En datos de usuario ponemos powershell para instalar el rol DNS y deshabilitar el firewall
+
 #echo $AWS_EC2_INSTANCE_ID
 ###############################################################################
 ## Crear IP Estatica para la instancia Windows. (IP elastica)
