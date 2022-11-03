@@ -1,4 +1,4 @@
-###########################################################
+###############################################################################
 #       Creación de una VPC, subredes, 
 #       internet gateway y tabla de rutas
 #      Además creará :
@@ -11,7 +11,7 @@
 #
 # Autor: Javier Terán González
 # Fecha: 22/10/2022
-###########################################################
+###############################################################################
 
 ## Definición de variables
 NN=30
@@ -28,7 +28,7 @@ echo "AWS_Subred_CIDR_BLOCK: " $AWS_Subred_CIDR_BLOCK
 echo "AWS_IP_UbuntuServer: "   $AWS_IP_UbuntuServer
 echo "AWS_IP_WindowsServer: "  $AWS_IP_WindowsServer
 echo "AWS_Proyecto: "          $AWS_Proyecto
-###########################################################
+###############################################################################
 ## Crear una VPC (Virtual Private Cloud) con su etiqueta
 ## La VPC tendrá un bloque IPv4 proporcionado por el usuario y uno IPv6 de AWS ???
 echo "Creando VPC..."
@@ -101,51 +101,48 @@ aws ec2 create-tags \
 --tags "Key=Name,Value=$AWS_Proyecto-rtb-public"
 
 
-###########################################################
-###########################################################
-###########################################################
-########## UBUNTU SERVER                   ################
-###########################################################
-###########################################################
-###########################################################
+###############################################################################
+###############################################################################
+###############################################################################
+####################       UBUNTU SERVER     ##################################
+###############################################################################
+###############################################################################
+###############################################################################
 ## Crear un grupo de seguridad Ubuntu Server
 echo "Creando grupo de seguridad Ubuntu Server..."
 aws ec2 create-security-group \
   --vpc-id $AWS_ID_VPC \
   --group-name $AWS_Proyecto-us-sg \
-  --description "$AWS_Proyecto-us-sg"
-
-echo "Obteniendo ID del grupo de seguridad Ubuntu Server..."
-AWS_CUSTOM_SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
-  --filters "Name=vpc-id,Values=$AWS_ID_VPC" \
-  --query 'SecurityGroups[?GroupName == `$AWS_Proyecto-us-sg`].GroupId' \
+  --description "$AWS_Proyecto-us-sg" \
   --output text)
+
+echo "ID Grupo de seguridad de ubuntu: " $AWS_ID_GrupoSeguridad_Windows
 
 echo "Añadiendo reglas de seguridad al grupo de seguridad Ubuntu Server..."
 ## Abrir los puertos de acceso a la instancia
 aws ec2 authorize-security-group-ingress \
-  --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
+  --group-id $AWS_ID_GrupoSeguridad_Ubuntu \
   --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 22, "ToPort": 22, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow SSH"}]}]'
 
 aws ec2 authorize-security-group-ingress \
-  --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
+  --group-id $AWS_ID_GrupoSeguridad_Ubuntu \
   --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 80, "ToPort": 80, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow HTTP"}]}]'
 
 aws ec2 authorize-security-group-ingress \
-  --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
+  --group-id $AWS_ID_GrupoSeguridad_Ubuntu \
   --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 53, "ToPort": 53, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow DNS(TCP)"}]}]'
 
 aws ec2 authorize-security-group-ingress \
-  --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
+  --group-id $AWS_ID_GrupoSeguridad_Ubuntu \
   --ip-permissions '[{"IpProtocol": "UDP", "FromPort": 53, "ToPort": 53, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow DNS(UDP)"}]}]'
 
 ## Añadirle etiqueta al grupo de seguridad
 echo "Añadiendo etiqueta al grupo de seguridad Ubuntu Server..."
 aws ec2 create-tags \
---resources $AWS_CUSTOM_SECURITY_GROUP_ID \
+--resources $AWS_ID_GrupoSeguridad_Ubuntu \
 --tags "Key=Name,Value=$AWS_Proyecto-us-sg" 
 
-###########################################################
+###############################################################################
 ## Crear una instancia EC2  (con una imagen de ubuntu 22.04 del 04/07/2022)
 echo "Creando instancia EC2 Ubuntu"
 AWS_AMI_Ubuntu_ID=ami-052efd3df9dad4825
@@ -154,7 +151,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --instance-type t2.micro \
   --key-name vockey \
   --monitoring "Enabled=false" \
-  --security-group-ids $AWS_CUSTOM_SECURITY_GROUP_ID \
+  --security-group-ids $AWS_ID_GrupoSeguridad_Ubuntu \
   --subnet-id $AWS_ID_SubredPublica \
   --user-data file://datosusuarioUbuntu.txt \
   --private-ip-address $AWS_IP_UbuntuServer \
@@ -163,7 +160,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --output text)
 
 #echo $AWS_EC2_INSTANCE_ID
-###########################################################
+###############################################################################
 ## Crear IP Estatica para la instancia Ubuntu. (IP elastica)
 echo "Creando IP elastica Ubuntu"
 AWS_IP_Fija_UbuntuServer=$(aws ec2 allocate-address --output text)
@@ -178,7 +175,7 @@ aws ec2 create-tags \
 --resources $AWS_IP_Fija_UbuntuServer_AllocationId \
 --tags Key=Name,Value=$AWS_Proyecto-us-ip
 
-##########################################################
+###############################################################################
 ## Asociar la ip elastica a la instancia Ubuntu
 echo "Esperando a que la instancia esté disponible para asociar la IP elastica"
 sleep 100
@@ -186,12 +183,14 @@ aws ec2 associate-address --instance-id $AWS_EC2_INSTANCE_ID --allocation-id $AW
 
 
 
-###########################################################
-###########################################################
-###########################################################
-########## WINDOWS SERVER                  ################
-###########################################################
-###########################################################
+###############################################################################
+###############################################################################
+###############################################################################
+####################       WINDOWS SERVER     #################################
+###############################################################################
+###############################################################################
+###############################################################################
+
 ## Crear un grupo de seguridad Windows Server
 echo "Creando grupo de seguridad Windows Server..."
 AWS_ID_GrupoSeguridad_Windows=$(aws ec2 create-security-group \
@@ -201,12 +200,6 @@ AWS_ID_GrupoSeguridad_Windows=$(aws ec2 create-security-group \
   --output text)
 
 echo "ID Grupo de seguridad de windows: " $AWS_ID_GrupoSeguridad_Windows
-
-#echo "Obteniendo ID del grupo de seguridad Windows Server..."
-#AWS_CUSTOM_SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
-#  --filters "Name=vpc-id,Values=$AWS_ID_VPC" \
-#  --query 'SecurityGroups[?GroupName == $AWS_Proyecto-ws-sg].GroupId' \
-#  --output text)
 
 ## Abrir los puertos de acceso a la instancia
 echo "Añadiendo reglas de seguridad al grupo de seguridad Windows Server..."
@@ -233,7 +226,7 @@ aws ec2 create-tags \
 --resources $AWS_ID_GrupoSeguridad_Windows \
 --tags "Key=Name,Value=$AWS_Proyecto-ws-sg" 
 
-###########################################################
+###############################################################################
 ## Crear una instancia EC2  (con una imagen de Windows 22.04 del 22/10/2022)
 echo "Creando instancia EC2 Windows"
 AWS_AMI_Windows_ID=ami-07a53499a088e4a8c
@@ -251,7 +244,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --output text)
 
 #echo $AWS_EC2_INSTANCE_ID
-###########################################################
+###############################################################################
 ## Crear IP Estatica para la instancia Windows. (IP elastica)
 echo "Creando IP elastica Windows"
 AWS_IP_Fija_WindowsServer=$(aws ec2 allocate-address --output text)
@@ -266,20 +259,18 @@ aws ec2 create-tags \
 --resources $AWS_IP_Fija_WindowsServer_AllocationId \
 --tags "Key=Name,Value=$AWS_Proyecto-ws-ip" 
 
-##########################################################
+###############################################################################
 ## Asociar la ip elastica a la instancia Windows
 echo "Esperando a que la instancia esté disponible para asociar la IP elastica. Tardará 2 minutos..."
 sleep 120
 aws ec2 associate-address --instance-id $AWS_EC2_INSTANCE_ID --allocation-id $AWS_IP_Fija_WindowsServer_AllocationId
 
 
-
-
-##########################################################
+###############################################################################
 ## Mostrar las ips publicas de las instancias
 echo "Mostrando las ips publicas de las instancias"
 AWS_EC2_INSTANCE_PUBLIC_IP=$(aws ec2 describe-instances \
 --query "Reservations[*].Instances[*].PublicIpAddress" \
 --output=text) &&
 echo $AWS_EC2_INSTANCE_PUBLIC_IP
-##########################################################
+###############################################################################
