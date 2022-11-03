@@ -37,7 +37,10 @@ echo "##################################################################"
 ###############################################################################
 ## Crear una VPC (Virtual Private Cloud) con su etiqueta
 ## La VPC tendrá un bloque IPv4 proporcionado por el usuario y uno IPv6 de AWS ???
+echo "############## Crear VPC, Subred, Rutas, Gateway ####################"
+echo "######################################################################"
 echo "Creando VPC..."
+
 AWS_ID_VPC=$(aws ec2 create-vpc \
   --cidr-block $AWS_VPC_CIDR_BLOCK \
   --amazon-provided-ipv6-cidr-block \
@@ -51,6 +54,7 @@ aws ec2 modify-vpc-attribute \
   --enable-dns-hostnames "{\"Value\":true}"
 
 ## Crear una subred publica con su etiqueta
+echo "Creando Subred..."
 AWS_ID_SubredPublica=$(aws ec2 create-subnet \
   --vpc-id $AWS_ID_VPC --cidr-block $AWS_Subred_CIDR_BLOCK \
   --availability-zone us-east-1a \
@@ -64,6 +68,7 @@ aws ec2 modify-subnet-attribute \
   --map-public-ip-on-launch
 
 ## Crear un Internet Gateway (Puerta de enlace) con su etiqueta
+echo "Creando Internet Gateway..."
 AWS_ID_InternetGateway=$(aws ec2 create-internet-gateway \
   --tag-specifications ResourceType=internet-gateway,Tags=[{Key=Name,Value=$AWS_Proyecto-igw}] \
   --query 'InternetGateway.{InternetGatewayId:InternetGatewayId}' \
@@ -75,6 +80,7 @@ aws ec2 attach-internet-gateway \
 --internet-gateway-id $AWS_ID_InternetGateway
 
 ## Crear una tabla de rutas
+echo "Creando tabla de rutas..."
 AWS_ID_TablaRutas=$(aws ec2 create-route-table \
 --vpc-id $AWS_ID_VPC \
 --query 'RouteTable.{RouteTableId:RouteTableId}' \
@@ -115,6 +121,8 @@ aws ec2 create-tags \
 ###############################################################################
 ###############################################################################
 ## Crear un grupo de seguridad Ubuntu Server
+echo "########################### Ubuntu Server ############################"
+echo "######################################################################"
 echo "Creando grupo de seguridad Ubuntu Server..."
 AWS_ID_GrupoSeguridad_Ubuntu=$(aws ec2 create-security-group \
   --vpc-id $AWS_ID_VPC \
@@ -197,6 +205,8 @@ aws ec2 associate-address --instance-id $AWS_EC2_INSTANCE_ID --allocation-id $AW
 ###############################################################################
 ###############################################################################
 ###############################################################################
+echo "########################### Windows Server ###########################"
+echo "######################################################################"
 
 ## Crear un grupo de seguridad Windows Server
 echo "Creando grupo de seguridad Windows Server..."
