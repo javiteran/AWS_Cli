@@ -194,33 +194,36 @@ aws ec2 associate-address --instance-id $AWS_EC2_INSTANCE_ID --allocation-id $AW
 ###########################################################
 ## Crear un grupo de seguridad Windows Server
 echo "Creando grupo de seguridad Windows Server..."
-aws ec2 create-security-group \
+AWS_ID_GrupoSeguridad_Windows=$(aws ec2 create-security-group \
   --vpc-id $AWS_ID_VPC \
   --group-name $AWS_Proyecto-ws-sg \
-  --description "$AWS_Proyecto-ws-sg"
-
-echo "Obteniendo ID del grupo de seguridad Windows Server..."
-AWS_CUSTOM_SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
-  --filters "Name=vpc-id,Values=$AWS_ID_VPC" \
-  --query 'SecurityGroups[?GroupName == $AWS_Proyecto-ws-sg].GroupId' \
+  --description "$AWS_Proyecto-ws-sg" \
   --output text)
+
+echo "ID Grupo de seguridad de windows: " $AWS_ID_GrupoSeguridad_Windows
+
+#echo "Obteniendo ID del grupo de seguridad Windows Server..."
+#AWS_CUSTOM_SECURITY_GROUP_ID=$(aws ec2 describe-security-groups \
+#  --filters "Name=vpc-id,Values=$AWS_ID_VPC" \
+#  --query 'SecurityGroups[?GroupName == $AWS_Proyecto-ws-sg].GroupId' \
+#  --output text)
 
 ## Abrir los puertos de acceso a la instancia
 echo "Añadiendo reglas de seguridad al grupo de seguridad Windows Server..."
 aws ec2 authorize-security-group-ingress \
-  --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
+  --group-id $AWS_ID_GrupoSeguridad_Windows \
   --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 3389, "ToPort": 3389, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow RDP"}]}]'
 
 aws ec2 authorize-security-group-ingress \
-  --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
+  --group-id $AWS_ID_GrupoSeguridad_Windows \
   --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 53,   "ToPort": 53,   "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow DNS(TCP)"}]}]'
 
 aws ec2 authorize-security-group-ingress \
-  --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
+  --group-id $AWS_ID_GrupoSeguridad_Windows \
   --ip-permissions '[{"IpProtocol": "UDP", "FromPort": 53,   "ToPort": 53,   "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow DNS(UDP)"}]}]'
 
 aws ec2 authorize-security-group-ingress \
-  --group-id $AWS_CUSTOM_SECURITY_GROUP_ID \
+  --group-id $AWS_ID_GrupoSeguridad_Windows \
   --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 80,   "ToPort": 80,   "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow HTTP"}]}]'
 
 
