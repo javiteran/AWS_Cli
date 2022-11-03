@@ -12,22 +12,28 @@
 # Autor: Javier Terán González
 # Fecha: 22/10/2022
 ###############################################################################
-
 ## Definición de variables
+
+##Variable a cambiar. Podría ser un parámetro de entrada. Pon tu número de alumno
 NN=30
+###############################################################################
 AWS_VPC_CIDR_BLOCK=10.22.0.0/16
 AWS_Subred_CIDR_BLOCK=10.22.1$NN.0/24
 AWS_IP_UbuntuServer=10.22.1$NN.100
 AWS_IP_WindowsServer=10.22.1$NN.200
 AWS_Proyecto=SRI$NN
 
+echo "##################################################################"
+echo "Creación de una VPC, subredes, internet gateway y tabla de rutas."
+echo "Además creará una instancia EC2 Ubuntu Server 22.04 y una instancia EC2 Windows Server 2022 con IPs elásticas en AWS con AWS CLI"
 echo "Se van a crear con los siguientes valores:"
-echo "Alumno: "                $NN
-echo "AWS_VPC_CIDR_BLOCK: "    $AWS_VPC_CIDR_BLOCK
+echo "Alumno:                " $NN
+echo "AWS_VPC_CIDR_BLOCK:    " $AWS_VPC_CIDR_BLOCK
 echo "AWS_Subred_CIDR_BLOCK: " $AWS_Subred_CIDR_BLOCK
-echo "AWS_IP_UbuntuServer: "   $AWS_IP_UbuntuServer
-echo "AWS_IP_WindowsServer: "  $AWS_IP_WindowsServer
-echo "AWS_Proyecto: "          $AWS_Proyecto
+echo "AWS_IP_UbuntuServer:   " $AWS_IP_UbuntuServer
+echo "AWS_IP_WindowsServer:  " $AWS_IP_WindowsServer
+echo "AWS_Proyecto:          " $AWS_Proyecto
+echo "##################################################################"
 ###############################################################################
 ## Crear una VPC (Virtual Private Cloud) con su etiqueta
 ## La VPC tendrá un bloque IPv4 proporcionado por el usuario y uno IPv6 de AWS ???
@@ -110,13 +116,13 @@ aws ec2 create-tags \
 ###############################################################################
 ## Crear un grupo de seguridad Ubuntu Server
 echo "Creando grupo de seguridad Ubuntu Server..."
-aws ec2 create-security-group \
+AWS_ID_GrupoSeguridad_Ubuntu=$(aws ec2 create-security-group \
   --vpc-id $AWS_ID_VPC \
   --group-name $AWS_Proyecto-us-sg \
   --description "$AWS_Proyecto-us-sg" \
   --output text)
 
-echo "ID Grupo de seguridad de ubuntu: " $AWS_ID_GrupoSeguridad_Windows
+echo "ID Grupo de seguridad de ubuntu: " $AWS_ID_GrupoSeguridad_Ubuntu
 
 echo "Añadiendo reglas de seguridad al grupo de seguridad Ubuntu Server..."
 ## Abrir los puertos de acceso a la instancia
