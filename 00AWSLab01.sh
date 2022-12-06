@@ -16,14 +16,14 @@
 
 # Error si el número de parámetros menor o igual que 0
 if [ $# -le 0 ]; then
-    echo "Hay que introducir el número de alumno NN."
+    echo "Hay que introducir el número de alumno NN. (Entre 01 y 99)."
     exit 1
 fi
-# Error si el parámetro 1 no es un número
-if  [[ "$1" = *([+-])*([0-9])*(.)*([0-9]) ]]; then
+# Error si el parámetro no está entre 01 y 99
+if  [ "$1" -gt 0 ] && [ "$1" -le 99 ]; then
     echo "Correcto. Es un número"
 else
-    echo "Hay que introducir el número de alumno NN." 
+    echo "Hay que introducir el número de alumno NN. (Entre 01 y 99)." 
     exit 1
 fi
 #echo "Hola $@!"
