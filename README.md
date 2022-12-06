@@ -38,6 +38,15 @@ Creará:
 * En Ubuntu y Windows se instalarán servicios y roles como DNS para probar la instalación en la creación.
 * Direcciones IPs públicas para las instancias EC2
 
+## Hacer lo mismo pero con un parámetro de entrada que será el NN del alumno
+
+```git
+git clone https://github.com/javiteran/AWS_Cli.git
+cd AWS_Cli
+sh 00AWSLab01.sh 15 
+```
+
+
 ## Hacer lo mismo con Python3 y Boto3
 
 Puedes buscar documentación para hacer los mismo con python3 en la siguiente imagen.
