@@ -49,5 +49,5 @@ sh 00AWSLab01.sh 15
 
 ## Hacer lo mismo con Python3 y Boto3
 
-Puedes buscar documentación para hacer los mismo con python3 en la siguiente imagen.
+Puedes buscar documentación para hacer los mismo con python3 en la siguiente web.
 https://boto3.amazonaws.com/v1/documentation/api/latest/guide/examples.html
