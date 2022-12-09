@@ -251,7 +251,7 @@ aws ec2 create-tags \
 --tags "Key=Name,Value=$AWS_Proyecto-ws-sg" 
 
 ###############################################################################
-## Crear una instancia EC2  (con una imagen de Windows 22.04 del 22/10/2022)
+## Crear una instancia EC2  (con una imagen de Windows Server 2022 del 22/10/2022)
 echo ""
 echo "Creando instancia EC2 Windows  ##################################"
 AWS_AMI_Windows_ID=ami-07a53499a088e4a8c
