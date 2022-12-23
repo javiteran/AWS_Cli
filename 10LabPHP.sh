@@ -292,9 +292,11 @@ AWS_ELB=$(aws elbv2 create-load-balancer \
     --name $AWS_Proyecto-elb \
     --type application \
     --subnets $AWS_ID_SubredPublica1 $AWS_ID_SubredPublica2 \
-    --security-groups $AWS_ID_GrupoSeguridad_Ubuntu)
+    --security-groups $AWS_ID_GrupoSeguridad_Ubuntu \
+    --output=text)
 echo "ELB"
 echo $AWS_ELB
+echo $AWS_ELB | awk '{print $1}'
 
 ###################################################
 #https://docs.aws.amazon.com/cli/latest/reference/elbv2/create-target-group.html
@@ -303,9 +305,11 @@ AWS_TargetGroup=$(aws elbv2 create-target-group \
     --protocol HTTP \
     --port 80 \
     --target-type instance \
-    --vpc-id $AWS_ID_VPC)
+    --vpc-id $AWS_ID_VPC \
+    --output=text)
 echo "Target Group"
 echo $AWS_TargetGroup
+echo $AWS_TargetGroup | awk '{print $1}'
 
 #https://docs.aws.amazon.com/cli/latest/reference/elbv2/register-targets.html
 aws elbv2 register-targets \
