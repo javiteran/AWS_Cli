@@ -205,7 +205,7 @@ AWS_EC2_INSTANCE_ID1=$(aws ec2 run-instances \
   --query 'Instances[0].InstanceId' \
   --output text)
 
-#echo $AWS_EC2_INSTANCE_ID1
+echo $AWS_EC2_INSTANCE_ID1
 ###############################################################################
 ## Crear IP Estatica para la instancia Ubuntu. (IP elastica)
 echo "Creando IP elastica Ubuntu"
@@ -249,7 +249,7 @@ AWS_EC2_INSTANCE_ID2=$(aws ec2 run-instances \
   --query 'Instances[0].InstanceId' \
   --output text)
 
-#echo $AWS_EC2_INSTANCE_ID2
+echo $AWS_EC2_INSTANCE_ID2
 ###############################################################################
 ## Crear IP Estatica para la instancia Ubuntu. (IP elastica)
 echo "Creando IP elastica Ubuntu"
