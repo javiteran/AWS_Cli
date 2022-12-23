@@ -12,7 +12,7 @@ systemctl apache2 restart
 #para que funcione la aplicación                                                                       
 username="admin"
 password="Monitor?2"
-host="profesdatabase.cluster-cpdz8rpeqn9p.us-east-1.rds.amazonaws.com"
+host="bbddphp.javiteran.com"
 basedatos="libros2"
 
 # Cambiar el fichero de constantes por los datos correctos
