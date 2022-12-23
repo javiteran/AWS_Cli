@@ -295,8 +295,8 @@ AWS_ELB=$(aws elbv2 create-load-balancer \
     --security-groups $AWS_ID_GrupoSeguridad_Ubuntu \
     --output=text)
 echo "ELB"
-echo $AWS_ELB
-echo $AWS_ELB | awk '{print $1}'
+echo $AWS_ELB | awk '{print $6}'
+AWS_ELB_arn=$(echo $AWS_ELB | awk '{print $6}')
 
 ###################################################
 #https://docs.aws.amazon.com/cli/latest/reference/elbv2/create-target-group.html
@@ -308,8 +308,8 @@ AWS_TargetGroup=$(aws elbv2 create-target-group \
     --vpc-id $AWS_ID_VPC \
     --output=text)
 echo "Target Group"
-echo $AWS_TargetGroup
-echo $AWS_TargetGroup | awk '{print $1}'
+echo $AWS_TargetGroup | awk '{print $12}'
+echo $AWS_TargetGroup_arn=$(echo $AWS_TargetGroup | awk '{print $12}')
 
 #https://docs.aws.amazon.com/cli/latest/reference/elbv2/register-targets.html
 aws elbv2 register-targets \
@@ -319,8 +319,8 @@ aws elbv2 register-targets \
 ###################################################
 #Crear listener y asociar el balanceador con el target-group
 aws elbv2 create-listener \
-    --load-balancer-arn $AWS_ELB \
+    --load-balancer-arn $AWS_ELB_arn \
     --protocol HTTP \
     --port 80 \
-    --default-actions Type=forward,TargetGroupArn=$AWS_TargetGroup
+    --default-actions Type=forward,TargetGroupArn=$AWS_TargetGroup_arn
 ###################################################
