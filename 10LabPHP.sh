@@ -192,7 +192,7 @@ aws ec2 create-tags \
 echo ""
 echo "Creando instancia EC2 Ubuntu  ##################################"
 AWS_AMI_Ubuntu_ID=ami-052efd3df9dad4825
-AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
+AWS_EC2_INSTANCE_ID1=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Ubuntu_ID \
   --instance-type t2.micro \
   --key-name vockey \
@@ -205,7 +205,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --query 'Instances[0].InstanceId' \
   --output text)
 
-#echo $AWS_EC2_INSTANCE_ID
+#echo $AWS_EC2_INSTANCE_ID1
 ###############################################################################
 ## Crear IP Estatica para la instancia Ubuntu. (IP elastica)
 echo "Creando IP elastica Ubuntu"
@@ -219,13 +219,13 @@ echo $AWS_IP_Fija_UbuntuServer_AllocationId
 ## Añadirle etiqueta a la ip elástica de Ubuntu
 aws ec2 create-tags \
 --resources $AWS_IP_Fija_UbuntuServer_AllocationId \
---tags Key=Name,Value=$AWS_Proyecto-us-ip
+--tags Key=Name,Value=$AWS_Proyecto-us1-ip
 
 ###############################################################################
 ## Asociar la ip elastica a la instancia Ubuntu
 echo "Esperando a que la instancia esté disponible para asociar la IP elastica"
 sleep 100
-aws ec2 associate-address --instance-id $AWS_EC2_INSTANCE_ID --allocation-id $AWS_IP_Fija_UbuntuServer_AllocationId
+aws ec2 associate-address --instance-id $AWS_EC2_INSTANCE_ID1 --allocation-id $AWS_IP_Fija_UbuntuServer_AllocationId
 
 
 ###############################################################################
@@ -236,7 +236,7 @@ aws ec2 associate-address --instance-id $AWS_EC2_INSTANCE_ID --allocation-id $AW
 echo ""
 echo "Creando instancia EC2 Ubuntu  ##################################"
 AWS_AMI_Ubuntu_ID=ami-052efd3df9dad4825
-AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
+AWS_EC2_INSTANCE_ID2=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Ubuntu_ID \
   --instance-type t2.micro \
   --key-name vockey \
@@ -249,7 +249,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --query 'Instances[0].InstanceId' \
   --output text)
 
-#echo $AWS_EC2_INSTANCE_ID
+#echo $AWS_EC2_INSTANCE_ID2
 ###############################################################################
 ## Crear IP Estatica para la instancia Ubuntu. (IP elastica)
 echo "Creando IP elastica Ubuntu"
@@ -263,13 +263,13 @@ echo $AWS_IP_Fija_UbuntuServer_AllocationId
 ## Añadirle etiqueta a la ip elástica de Ubuntu
 aws ec2 create-tags \
 --resources $AWS_IP_Fija_UbuntuServer_AllocationId \
---tags Key=Name,Value=$AWS_Proyecto-us-ip
+--tags Key=Name,Value=$AWS_Proyecto-us2-ip
 
 ###############################################################################
 ## Asociar la ip elastica a la instancia Ubuntu
 echo "Esperando a que la instancia esté disponible para asociar la IP elastica"
 sleep 100
-aws ec2 associate-address --instance-id $AWS_EC2_INSTANCE_ID --allocation-id $AWS_IP_Fija_UbuntuServer_AllocationId
+aws ec2 associate-address --instance-id $AWS_EC2_INSTANCE_ID2 --allocation-id $AWS_IP_Fija_UbuntuServer_AllocationId
 
 
 ###############################################################################
@@ -280,3 +280,43 @@ AWS_EC2_INSTANCE_PUBLIC_IP=$(aws ec2 describe-instances \
 --output=text) &&
 echo $AWS_EC2_INSTANCE_PUBLIC_IP
 ###############################################################################
+
+
+###############################################################################
+###############################################################################
+###########          BALANCEO DE CARGA ELB    #################################
+###############################################################################
+###############################################################################
+# Crear el balanceador
+AWS_ELB=$(aws elbv2 create-load-balancer \
+    --name $AWS_Proyecto-elb \
+    --type application \
+    --subnets $AWS_ID_SubredPublica1 $AWS_ID_SubredPublica2 \
+    --security-groups $AWS_ID_GrupoSeguridad_Ubuntu)
+echo "ELB"
+echo $AWS_ELB
+
+###################################################
+#https://docs.aws.amazon.com/cli/latest/reference/elbv2/create-target-group.html
+AWS_TargetGroup=$(aws elbv2 create-target-group \
+    --name $AWS_Proyecto-targets \
+    --protocol HTTP \
+    --port 80 \
+    --target-type instance \
+    --vpc-id $AWS_ID_VPC)
+echo "Target Group"
+echo $AWS_TargetGroup
+
+#https://docs.aws.amazon.com/cli/latest/reference/elbv2/register-targets.html
+aws elbv2 register-targets \
+    --target-group-arn $AWS_TargetGroup \
+    --targets Id=$AWS_EC2_INSTANCE_ID1 Id=$AWS_EC2_INSTANCE_ID2
+
+###################################################
+#Crear listener y asociar el balanceador con el target-group
+aws elbv2 create-listener \
+    --load-balancer-arn $AWS_ELB \
+    --protocol HTTP \
+    --port 80 \
+    --default-actions Type=forward,TargetGroupArn=$AWS_TargetGroup
+###################################################
