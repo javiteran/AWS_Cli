@@ -309,7 +309,7 @@ AWS_TargetGroup=$(aws elbv2 create-target-group \
     --output=text)
 echo "Target Group"
 echo $AWS_TargetGroup | awk '{print $12}'
-$AWS_TargetGroup_arn=$(echo $AWS_TargetGroup | awk '{print $12}')
+AWS_TargetGroup_arn=$(echo $AWS_TargetGroup | awk '{print $12}')
 
 #https://docs.aws.amazon.com/cli/latest/reference/elbv2/register-targets.html
 aws elbv2 register-targets \
