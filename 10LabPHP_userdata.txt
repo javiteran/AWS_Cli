@@ -1,0 +1,22 @@
+#!/bin/bash
+apt -y update
+apt -y upgrade
+apt install -y apache2 php php-mysql mysql-client
+cd /var/www/html/
+rm index.html
+git clone https://github.com/IESAlisal/22asir2proyecto-grupo6.git .
+cp constantes-sample.php constantes.php
+systemctl apache2 restart
+
+#Modificar el fichero de configuración de la BBDD
+#para que funcione la aplicación                                                                       
+username="admin"
+password="Monitor?2"
+host="profesdatabase.cluster-cpdz8rpeqn9p.us-east-1.rds.amazonaws.com"
+basedatos="libros2"
+
+# Cambiar el fichero de constantes por los datos correctos
+sed -i "s/localhost/$host/g"       /var/www/html/constantes.php
+sed -i "s/usuario/$username/g"     /var/www/html/constantes.php
+sed -i "s/usuariopass/$password/g" /var/www/html/constantes.php
+sed -i "s/libros2/$basedatos/g"    /var/www/html/constantes.php
