@@ -33,8 +33,8 @@ echo "Alumno: " $NN;
 AWS_VPC_CIDR_BLOCK=10.22.0.0/16
 AWS_Subred1_CIDR_BLOCK=10.22.1$NN.0/24
 AWS_Subred2_CIDR_BLOCK=10.22.1$NN.0/24
-AWS_IP_UbuntuServer=10.22.1$NN.100
-AWS_IP_WindowsServer=10.22.1$NN.200
+AWS_IP_UbuntuServer1=10.22.1$NN.100
+AWS_IP_UbuntuServer2=10.22.1$NN.200
 AWS_Proyecto=SRI$NN
 
 echo "######################################################################"
@@ -45,8 +45,8 @@ echo "Alumno:                " $NN
 echo "AWS_VPC_CIDR_BLOCK:    " $AWS_VPC_CIDR_BLOCK
 echo "AWS_Subred1_CIDR_BLOCK: " $AWS_Subred1_CIDR_BLOCK
 echo "AWS_Subred2_CIDR_BLOCK: " $AWS_Subred2_CIDR_BLOCK
-echo "AWS_IP_UbuntuServer:   " $AWS_IP_UbuntuServer
-echo "AWS_IP_WindowsServer:  " $AWS_IP_WindowsServer
+echo "AWS_IP_UbuntuServer1:   " $AWS_IP_UbuntuServer1
+echo "AWS_IP_UbuntuServer2:  " $AWS_IP_UbuntuServer2
 echo "AWS_Proyecto:          " $AWS_Proyecto
 echo "######################################################################"
 ###############################################################################
@@ -200,7 +200,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --security-group-ids $AWS_ID_GrupoSeguridad_Ubuntu \
   --subnet-id $AWS_ID_SubredPublica1 \
   --user-data file://10LabPHP_userdata.txt \
-  --private-ip-address $AWS_IP_UbuntuServer \
+  --private-ip-address $AWS_IP_UbuntuServer1 \
   --tag-specifications ResourceType=instance,Tags=[{Key=Name,Value=$AWS_Proyecto-us1}] \
   --query 'Instances[0].InstanceId' \
   --output text)
@@ -242,9 +242,9 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --key-name vockey \
   --monitoring "Enabled=false" \
   --security-group-ids $AWS_ID_GrupoSeguridad_Ubuntu \
-  --subnet-id $AWS_ID_SubredPublica1 \
+  --subnet-id $AWS_ID_SubredPublica2 \
   --user-data file://10LabPHP_userdata.txt \
-  --private-ip-address $AWS_IP_UbuntuServer \
+  --private-ip-address $AWS_IP_UbuntuServer2 \
   --tag-specifications ResourceType=instance,Tags=[{Key=Name,Value=$AWS_Proyecto-us2}] \
   --query 'Instances[0].InstanceId' \
   --output text)
