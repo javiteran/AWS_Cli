@@ -32,22 +32,22 @@ echo "Alumno: " $NN;
 ###############################################################################
 AWS_VPC_CIDR_BLOCK=10.22.0.0/16
 AWS_Subred1_CIDR_BLOCK=10.22.1$NN.0/24
-AWS_Subred2_CIDR_BLOCK=10.22.1$NN.0/24
+AWS_Subred2_CIDR_BLOCK=10.22.2$NN.0/24
 AWS_IP_UbuntuServer1=10.22.1$NN.100
-AWS_IP_UbuntuServer2=10.22.1$NN.200
-AWS_Proyecto=SRI$NN
+AWS_IP_UbuntuServer2=10.22.2$NN.100
+AWS_Proyecto=g6PHP$NN
 
 echo "######################################################################"
 echo "Creación de una VPC, subredes, internet gateway y tabla de rutas."
 echo "Además creará una instancia EC2 Ubuntu Server 22.04 y una instancia EC2 Windows Server 2022 con IPs elásticas en AWS con AWS CLI"
 echo "Se van a crear con los siguientes valores:"
-echo "Alumno:                " $NN
-echo "AWS_VPC_CIDR_BLOCK:    " $AWS_VPC_CIDR_BLOCK
+echo "Alumno:                 " $NN
+echo "AWS_VPC_CIDR_BLOCK:     " $AWS_VPC_CIDR_BLOCK
 echo "AWS_Subred1_CIDR_BLOCK: " $AWS_Subred1_CIDR_BLOCK
 echo "AWS_Subred2_CIDR_BLOCK: " $AWS_Subred2_CIDR_BLOCK
 echo "AWS_IP_UbuntuServer1:   " $AWS_IP_UbuntuServer1
-echo "AWS_IP_UbuntuServer2:  " $AWS_IP_UbuntuServer2
-echo "AWS_Proyecto:          " $AWS_Proyecto
+echo "AWS_IP_UbuntuServer2:   " $AWS_IP_UbuntuServer2
+echo "AWS_Proyecto:           " $AWS_Proyecto
 echo "######################################################################"
 ###############################################################################
 ## Crear una VPC (Virtual Private Cloud) con su etiqueta
