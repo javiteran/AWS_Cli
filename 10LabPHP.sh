@@ -314,7 +314,7 @@ AWS_TargetGroup_arn=$(echo $AWS_TargetGroup | awk '{print $12}')
 #https://docs.aws.amazon.com/cli/latest/reference/elbv2/register-targets.html
 sleep 100
 aws elbv2 register-targets \
-    --target-group-arn $AWS_TargetGroup \
+    --target-group-arn $AWS_TargetGroup_arn \
     --targets Id=$AWS_EC2_INSTANCE_ID1 Id=$AWS_EC2_INSTANCE_ID2
 
 ###################################################
