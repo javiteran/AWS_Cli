@@ -1,16 +1,19 @@
 ###############################################################################
 #       Creación de una VPC, subredes, 
 #       internet gateway y tabla de rutas
-#      Además creará :
-#            - una instancia EC2 Ubuntu Server 22.04
-#            - una instancia EC2 Windows Server 2022
-#      con IPs elásticas
+#    Realizado para publicar una pequeña aplicación PHP en dos instancias EC2 
+#    utilizando un balanceo ELB que reparte la carga entre las dos instancias   
+#    Creará :
+#            - Dos instancias EC2 Ubuntu Server 22.04 con IPs elásticas
+#               (no serían necesarias)
+#            - Un balanceador de carga ELB
 #      en AWS con AWS CLI
+#    La aplicación se clona desde un repositorio de github
 #
 # Utilizado para AWS Academy Learning Lab
 #
 # Autor: Javier Terán González
-# Fecha: 06/12/2022
+# Fecha: 29/12/2022
 ###############################################################################
 ## Tratamiento de variables de entrada
 
@@ -62,6 +65,8 @@ AWS_ID_VPC=$(aws ec2 create-vpc \
   --tag-specification ResourceType=vpc,Tags=[{Key=Name,Value=$AWS_Proyecto-vpc}] \
   --query 'Vpc.{VpcId:VpcId}' \
   --output text)
+
+export AWS_ID_VPC=$AWS_ID_VPC
 
 ## Habilitar los nombres DNS para la VPC
 aws ec2 modify-vpc-attribute \

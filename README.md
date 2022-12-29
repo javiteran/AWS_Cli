@@ -17,7 +17,7 @@ https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ec2/index.htm
 ```git
 git clone https://github.com/javiteran/AWS_Cli.git
 cd AWS_Cli
-sh 00AWSCrearVPC_EC2Win_Ubu.sh
+. 00AWSCrearVPC_EC2Win_Ubu.sh
 ```
 
 Con este fichero se creará el siguiente entorno de tareas:
