@@ -66,7 +66,9 @@ AWS_ID_VPC=$(aws ec2 create-vpc \
   --query 'Vpc.{VpcId:VpcId}' \
   --output text)
 
+echo $AWS_ID_VPC
 export AWS_ID_VPC=$AWS_ID_VPC
+
 
 ## Habilitar los nombres DNS para la VPC
 aws ec2 modify-vpc-attribute \
