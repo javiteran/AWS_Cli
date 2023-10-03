@@ -11,6 +11,8 @@
 #
 # Autor: Javier Terán González
 # Fecha: 06/12/2022
+# Versión: 1.3
+# Modificaciones: 03/10/2023. Cambiar AMIs de Ubuntu y Windows
 ###############################################################################
 ## Tratamiento de variables de entrada
 
@@ -30,10 +32,10 @@ fi
 NN=$1
 echo "Alumno: " $NN;
 ###############################################################################
-AWS_VPC_CIDR_BLOCK=10.22.0.0/16
-AWS_Subred_CIDR_BLOCK=10.22.1$NN.0/24
-AWS_IP_UbuntuServer=10.22.1$NN.100
-AWS_IP_WindowsServer=10.22.1$NN.200
+AWS_VPC_CIDR_BLOCK=10.23.0.0/16
+AWS_Subred_CIDR_BLOCK=10.23.1$NN.0/24
+AWS_IP_UbuntuServer=10.23.1$NN.100
+AWS_IP_WindowsServer=10.23.1$NN.200
 AWS_Proyecto=SRI$NN
 
 echo "######################################################################"
@@ -177,10 +179,10 @@ aws ec2 create-tags \
 --tags "Key=Name,Value=$AWS_Proyecto-us-sg" 
 
 ###############################################################################
-## Crear una instancia EC2  (con una imagen de ubuntu 22.04 del 04/07/2022)
+## Crear una instancia EC2  (con una imagen de ubuntu 22.04)
 echo ""
 echo "Creando instancia EC2 Ubuntu  ##################################"
-AWS_AMI_Ubuntu_ID=ami-052efd3df9dad4825
+AWS_AMI_Ubuntu_ID=ami-053b0d53c279acc90
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Ubuntu_ID \
   --instance-type t2.micro \
@@ -264,10 +266,10 @@ aws ec2 create-tags \
 --tags "Key=Name,Value=$AWS_Proyecto-ws-sg" 
 
 ###############################################################################
-## Crear una instancia EC2  (con una imagen de Windows Server 2022 del 22/10/2022)
+## Crear una instancia EC2  (con una imagen de Windows Server 2022)
 echo ""
 echo "Creando instancia EC2 Windows  ##################################"
-AWS_AMI_Windows_ID=ami-0e38fa17744b2f6a5
+AWS_AMI_Windows_ID=ami-0be0e902919675894
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Windows_ID \
   --instance-type t2.micro \
