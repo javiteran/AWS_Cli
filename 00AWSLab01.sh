@@ -11,8 +11,8 @@
 #
 # Autor: Javier Terán González
 # Fecha: 06/12/2022
-# Versión: 1.3
-# Modificaciones: 03/10/2023. Cambiar AMIs de Ubuntu y Windows
+# Versión: 1.31
+# Modificaciones: 03/10/2023. Cambiar AMIs de Ubuntu y Windows y añadir el año al proyecto
 ###############################################################################
 ## Tratamiento de variables de entrada
 
@@ -36,7 +36,7 @@ AWS_VPC_CIDR_BLOCK=10.23.0.0/16
 AWS_Subred_CIDR_BLOCK=10.23.1$NN.0/24
 AWS_IP_UbuntuServer=10.23.1$NN.100
 AWS_IP_WindowsServer=10.23.1$NN.200
-AWS_Proyecto=SRI$NN
+AWS_Proyecto=SRI23$NN
 
 echo "######################################################################"
 echo "Creación de una VPC, subredes, internet gateway y tabla de rutas."
