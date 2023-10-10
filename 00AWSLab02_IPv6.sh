@@ -67,8 +67,10 @@ AWS_IPV6_CIDR_BLOCK=$(aws ec2 describe-vpcs \
   --vpc-ids $AWS_ID_VPC \
   --query 'Vpcs[0].Ipv6CidrBlockAssociationSet[0].Ipv6CidrBlock' \
   --output text)
-
+AWS_IPV6_CIDR=${AWS_IPV6_CIDR_BLOCK::-6}1::/64
 echo $AWS_IPV6_CIDR_BLOCK
+echo $AWS_IPV6_CIDR
+
 
 ## Habilitar los nombres DNS para la VPC
 aws ec2 modify-vpc-attribute \
@@ -79,7 +81,7 @@ aws ec2 modify-vpc-attribute \
 echo "Creando Subred..."
 AWS_ID_SubredPublica=$(aws ec2 create-subnet \
   --vpc-id $AWS_ID_VPC --cidr-block $AWS_Subred_CIDR_BLOCK \
-  --ipv6-cidr-block $AWS_IPV6_CIDR_BLOCK \
+  --ipv6-cidr-block $AWS_IPV6_CIDR \
   --availability-zone us-east-1a \
   --tag-specifications ResourceType=subnet,Tags=[{Key=Name,Value=$AWS_Proyecto-subred-publica}] \
   --query 'Subnet.{SubnetId:SubnetId}' \
