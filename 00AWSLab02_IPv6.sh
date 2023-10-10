@@ -67,12 +67,13 @@ AWS_IPV6_CIDR_BLOCK=$(aws ec2 describe-vpcs \
   --vpc-ids $AWS_ID_VPC \
   --query 'Vpcs[0].Ipv6CidrBlockAssociationSet[0].Ipv6CidrBlock' \
   --output text)
-echo ${AWS_IPV6_CIDR_BLOCK::-6}1::/64
-AWS_IPV6_CIDR=${AWS_IPV6_CIDR_BLOCK::-6}1::/64
-
 echo $AWS_IPV6_CIDR_BLOCK
-echo $AWS_IPV6_CIDR
+echo $AWS_IPV6_CIDR_BLOCK | awk '{print $1}'
+echo $AWS_IPV6_CIDR_BLOCK | cut -d "/" -f 1
 
+AWS_IPV6_CIDR=$AWS_IPV6_CIDR_BLOCK | cut -d "/" -f 1
+echo $AWS_IPV6_CIDR
+echo NADA
 
 ## Habilitar los nombres DNS para la VPC
 aws ec2 modify-vpc-attribute \
