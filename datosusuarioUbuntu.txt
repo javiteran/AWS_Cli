@@ -2,6 +2,7 @@
 sudo apt update -y
 sudo apt upgrade -y
 sudo apt install -y bind9
-sudo apt install -y apache2 mariadb-server
+sudo apt install -y apache2 
+# sudo apt install -y mariadb-server
 sudo apt install -y php
 sudo systemctl start apache2
