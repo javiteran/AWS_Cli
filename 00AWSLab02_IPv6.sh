@@ -279,6 +279,7 @@ aws ec2 create-tags \
 echo ""
 echo "Creando instancia EC2 Windows  ##################################"
 AWS_AMI_Windows_ID=ami-0be0e902919675894
+sed -i "s/NN/$NN/g"            ./datosusuarioWindows.txt
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Windows_ID \
   --instance-type t2.micro \
