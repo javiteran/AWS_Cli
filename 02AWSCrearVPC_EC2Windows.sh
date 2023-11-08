@@ -129,9 +129,9 @@ aws ec2 create-tags \
 --tags "Key=Name,Value=SRINNws-sg" 
 
 ###########################################################
-## Crear una instancia EC2  (con una imagen de Windows 22.04 del 22/10/2022)
+## Crear una instancia EC2  (con una imagen de Windows 22.04 del 22/10/2023)
 echo "Creando instancia EC2 Windows"
-AWS_AMI_Windows_ID=ami-07a53499a088e4a8c
+AWS_AMI_Windows_ID=ami-005f8adf84f8c5057
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Windows_ID \
   --instance-type t2.micro \

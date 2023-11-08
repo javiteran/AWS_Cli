@@ -1,6 +1,6 @@
 ###############################################################################
 #       Creación de una VPC, subredes, 
-#       internet gateway y tabla de rutas
+#       internet gateway y tabla de rutas con IPv4 e IPv6
 #      Además creará :
 #            - una instancia EC2 Ubuntu Server 22.04
 #            - una instancia EC2 Windows Server 2022
@@ -11,8 +11,9 @@
 #
 # Autor: Javier Terán González
 # Fecha: 06/12/2022
-# Versión: 1.31
-# Modificaciones: 03/10/2023. Cambiar AMIs de Ubuntu y Windows y añadir el año al proyecto
+# Versión: 1.33
+# Modificaciones: 22/10/2023. Cambiar AMIs de Ubuntu y Windows y añadir el año al proyecto
+#                 08/11/2023. Añadir IPv6 a las instancias
 ###############################################################################
 ## Tratamiento de variables de entrada
 
@@ -191,7 +192,7 @@ aws ec2 create-tags \
 ## Crear una instancia EC2 con dirección IPv6 (con una imagen de ubuntu 22.04)
 echo ""
 echo "Creando instancia EC2 Ubuntu  ##################################"
-AWS_AMI_Ubuntu_ID=ami-053b0d53c279acc90
+AWS_AMI_Ubuntu_ID=ami-0fc5d935ebf8bc3bc
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Ubuntu_ID \
   --instance-type t2.micro \
@@ -279,7 +280,7 @@ aws ec2 create-tags \
 ## Crear una instancia EC2 con dirección IPv6 (con una imagen de Windows Server 2022)
 echo ""
 echo "Creando instancia EC2 Windows  ##################################"
-AWS_AMI_Windows_ID=ami-0be0e902919675894
+AWS_AMI_Windows_ID=ami-005f8adf84f8c5057
 sed -i "s/NN/$NN/g"            ./datosusuarioWindows.txt
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Windows_ID \

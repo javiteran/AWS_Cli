@@ -120,9 +120,9 @@ aws ec2 create-tags \
 --tags "Key=Name,Value=SRINNus-sg" 
 
 ###########################################################
-## Crear una instancia EC2  (con una imagen de ubuntu 22.04 del 04/07/2022)
+## Crear una instancia EC2  (con una imagen de ubuntu 22.04 del 08/11/2023)
 echo "Creando instancia EC2 Ubuntu"
-AWS_AMI_Ubuntu_ID=ami-052efd3df9dad4825
+AWS_AMI_Ubuntu_ID=ami-0fc5d935ebf8bc3bc
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Ubuntu_ID \
   --instance-type t2.micro \
