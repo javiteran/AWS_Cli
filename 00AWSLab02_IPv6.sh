@@ -188,7 +188,7 @@ aws ec2 create-tags \
 --tags "Key=Name,Value=$AWS_Proyecto-us-sg" 
 
 ###############################################################################
-## Crear una instancia EC2  (con una imagen de ubuntu 22.04)
+## Crear una instancia EC2 con dirección IPv6 (con una imagen de ubuntu 22.04)
 echo ""
 echo "Creando instancia EC2 Ubuntu  ##################################"
 AWS_AMI_Ubuntu_ID=ami-053b0d53c279acc90
@@ -197,6 +197,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --instance-type t2.micro \
   --key-name vockey \
   --monitoring "Enabled=false" \
+  --Ipv6-addresses "Primary=true,Ipv6AddressCount=1" \
   --security-group-ids $AWS_ID_GrupoSeguridad_Ubuntu \
   --subnet-id $AWS_ID_SubredPublica \
   --user-data file://datosusuarioUbuntu.txt \
@@ -275,7 +276,7 @@ aws ec2 create-tags \
 --tags "Key=Name,Value=$AWS_Proyecto-ws-sg" 
 
 ###############################################################################
-## Crear una instancia EC2  (con una imagen de Windows Server 2022)
+## Crear una instancia EC2 con dirección IPv6 (con una imagen de Windows Server 2022)
 echo ""
 echo "Creando instancia EC2 Windows  ##################################"
 AWS_AMI_Windows_ID=ami-0be0e902919675894
@@ -285,6 +286,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --instance-type t2.micro \
   --key-name vockey \
   --monitoring "Enabled=false" \
+  --Ipv6-addresses "Primary=true,Ipv6AddressCount=1" \
   --security-group-ids $AWS_ID_GrupoSeguridad_Windows \
   --subnet-id $AWS_ID_SubredPublica \
   --user-data file://datosusuarioWindows.txt \
