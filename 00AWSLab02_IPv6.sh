@@ -340,4 +340,10 @@ AWS_EC2_INSTANCE_PUBLIC_IP=$(aws ec2 describe-instances \
 --query "Reservations[*].Instances[*].PublicIpAddress" \
 --output=text) &&
 echo $AWS_EC2_INSTANCE_PUBLIC_IP
+
+
+AWS_EC2_INSTANCE_IPV6=$(aws ec2 describe-instances \
+--query "Reservations[*].Instances[*].NetworkInterfaces[*].Ipv6Addresses[0].Ipv6Address" \
+--output text)
+echo $AWS_EC2_INSTANCE_IPV6
 ###############################################################################
