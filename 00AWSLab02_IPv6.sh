@@ -198,7 +198,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --instance-type t2.micro \
   --key-name vockey \
   --monitoring "Enabled=false" \
-  --Ipv6-addresses "Primary=true,Ipv6AddressCount=1" \
+  --Ipv6AddressCount 1 \
   --security-group-ids $AWS_ID_GrupoSeguridad_Ubuntu \
   --subnet-id $AWS_ID_SubredPublica \
   --user-data file://datosusuarioUbuntu.txt \
@@ -287,7 +287,6 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --instance-type t2.micro \
   --key-name vockey \
   --monitoring "Enabled=false" \
-  --Ipv6-addresses "Primary=true,Ipv6AddressCount=1" \
   --security-group-ids $AWS_ID_GrupoSeguridad_Windows \
   --subnet-id $AWS_ID_SubredPublica \
   --user-data file://datosusuarioWindows.txt \
