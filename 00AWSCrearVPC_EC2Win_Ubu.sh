@@ -2,7 +2,7 @@
 #       Creación de una VPC, subredes, 
 #       internet gateway y tabla de rutas
 #      Además creará :
-#            - una instancia EC2 Ubuntu Server 22.04
+#            - una instancia EC2 Ubuntu Server 24.04
 #            - una instancia EC2 Windows Server 2022
 #      con IPs elásticas
 #      en AWS con AWS CLI
@@ -11,21 +11,22 @@
 #
 # Autor: Javier Terán González
 # Fecha: 22/10/2022
+#                 26/11/2024. Cambiar AMIs de Ubuntu y Windows y actualizar año del proyecto
 ###############################################################################
 ## Definición de variables
 
 ##Variable a cambiar. Podría ser un parámetro de entrada. Pon tu número de alumno
 NN=30
 ###############################################################################
-AWS_VPC_CIDR_BLOCK=10.22.0.0/16
-AWS_Subred_CIDR_BLOCK=10.22.1$NN.0/24
-AWS_IP_UbuntuServer=10.22.1$NN.100
-AWS_IP_WindowsServer=10.22.1$NN.200
+AWS_VPC_CIDR_BLOCK=10.24.0.0/16
+AWS_Subred_CIDR_BLOCK=10.24.1$NN.0/24
+AWS_IP_UbuntuServer=10.24.1$NN.100
+AWS_IP_WindowsServer=10.24.1$NN.200
 AWS_Proyecto=SRI$NN
 
 echo "######################################################################"
 echo "Creación de una VPC, subredes, internet gateway y tabla de rutas."
-echo "Además creará una instancia EC2 Ubuntu Server 22.04 y una instancia EC2 Windows Server 2022 con IPs elásticas en AWS con AWS CLI"
+echo "Además creará una instancia EC2 Ubuntu Server 24.04 y una instancia EC2 Windows Server 2022 con IPs elásticas en AWS con AWS CLI"
 echo "Se van a crear con los siguientes valores:"
 echo "Alumno:                " $NN
 echo "AWS_VPC_CIDR_BLOCK:    " $AWS_VPC_CIDR_BLOCK
@@ -164,7 +165,7 @@ aws ec2 create-tags \
 --tags "Key=Name,Value=$AWS_Proyecto-us-sg" 
 
 ###############################################################################
-## Crear una instancia EC2  (con una imagen de ubuntu 22.04 del 08/11/2023)
+## Crear una instancia EC2  (con una imagen de ubuntu 24.04 del 08/11/2023)
 echo ""
 echo "Creando instancia EC2 Ubuntu  ##################################"
 AWS_AMI_Ubuntu_ID=ami-0866a3c8686eaeeba
