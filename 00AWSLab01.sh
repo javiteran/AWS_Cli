@@ -37,7 +37,7 @@ AWS_VPC_CIDR_BLOCK=10.24.0.0/16
 AWS_Subred_CIDR_BLOCK=10.24.1$NN.0/24
 AWS_IP_UbuntuServer=10.24.1$NN.100
 AWS_IP_WindowsServer=10.24.1$NN.200
-AWS_Proyecto=SRI23$NN
+AWS_Proyecto=SRI24$NN
 
 echo "######################################################################"
 echo "Creación de una VPC, subredes, internet gateway y tabla de rutas."
@@ -270,7 +270,7 @@ aws ec2 create-tags \
 ## Crear una instancia EC2  (con una imagen de Windows Server 2022)
 echo ""
 echo "Creando instancia EC2 Windows  ##################################"
-AWS_AMI_Windows_ID=ami-05b1a50d6798f63cb
+AWS_AMI_Windows_ID=ami-015f002db921fbf07
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Windows_ID \
   --instance-type t2.micro \

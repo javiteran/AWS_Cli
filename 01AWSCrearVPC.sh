@@ -10,10 +10,10 @@
 ###########################################################
 
 ## Definición de variables
-AWS_VPC_CIDR_BLOCK=10.22.0.0/16
-AWS_Subred_CIDR_BLOCK=10.22.130.0/24
-AWS_IP_UbuntuServer=10.22.130.100
-AWS_IP_WindowsServer=10.22.130.200
+AWS_VPC_CIDR_BLOCK=10.24.0.0/16
+AWS_Subred_CIDR_BLOCK=10.24.130.0/24
+AWS_IP_UbuntuServer=10.24.130.100
+AWS_IP_WindowsServer=10.24.130.200
 
 ###########################################################
 ## Crear una VPC (Virtual Private Cloud) con su etiqueta
