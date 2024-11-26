@@ -273,19 +273,36 @@ echo "ID Grupo de seguridad de windows: " $AWS_ID_GrupoSeguridad_Windows
 echo "Añadiendo reglas de seguridad al grupo de seguridad Windows Server..."
 aws ec2 authorize-security-group-ingress \
   --group-id $AWS_ID_GrupoSeguridad_Windows \
-  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 3389, "ToPort": 3389, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow RDP"}]}]'
+  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 3389, "ToPort": 3389, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow RDP IPv4"}]}]'
 
 aws ec2 authorize-security-group-ingress \
   --group-id $AWS_ID_GrupoSeguridad_Windows \
-  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 53,   "ToPort": 53,   "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow DNS(TCP)"}]}]'
+  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 53,   "ToPort": 53,   "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow DNS(TCP) IPv4"}]}]'
 
 aws ec2 authorize-security-group-ingress \
   --group-id $AWS_ID_GrupoSeguridad_Windows \
-  --ip-permissions '[{"IpProtocol": "UDP", "FromPort": 53,   "ToPort": 53,   "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow DNS(UDP)"}]}]'
+  --ip-permissions '[{"IpProtocol": "UDP", "FromPort": 53,   "ToPort": 53,   "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow DNS(UDP) IPv4"}]}]'
 
 aws ec2 authorize-security-group-ingress \
   --group-id $AWS_ID_GrupoSeguridad_Windows \
-  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 80,   "ToPort": 80,   "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow HTTP"}]}]'
+  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 80,   "ToPort": 80,   "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow HTTP IPv4"}]}]'
+
+aws ec2 authorize-security-group-ingress \
+  --group-id $AWS_ID_GrupoSeguridad_Windows \
+  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 3389, "ToPort": 3389, "Ipv6Ranges": [{"CidrIpv6": "::/0", "Description": "Allow SSH IPv6"}]}]'
+
+aws ec2 authorize-security-group-ingress \
+  --group-id $AWS_ID_GrupoSeguridad_Windows \
+  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 80, "ToPort": 80, "Ipv6Ranges": [{"CidrIpv6": "::/0", "Description": "Allow HTTP IPv6"}]}]'
+
+aws ec2 authorize-security-group-ingress \
+  --group-id $AWS_ID_GrupoSeguridad_Windows \
+  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 53, "ToPort": 53, "Ipv6Ranges": [{"CidrIpv6": "::/0", "Description": "Allow DNS(TCP) IPv6"}]}]'
+
+aws ec2 authorize-security-group-ingress \
+  --group-id $AWS_ID_GrupoSeguridad_Windows \
+  --ip-permissions '[{"IpProtocol": "UDP", "FromPort": 53, "ToPort": 53, "Ipv6Ranges": [{"CidrIpv6": "::/0", "Description": "Allow DNS(UDP) IPv6"}]}]'
+
 
 
 ## Añadirle etiqueta al grupo de seguridad
