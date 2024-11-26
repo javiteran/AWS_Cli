@@ -6,5 +6,5 @@ Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False
 # Modificar las propiedades TCP/IP de la tarjeta de red para añadir los servidores DNS
 Get-DnsClient | Set-DnsClientServerAddress -ServerAddresses ("10.24.1NN.100","10.24.1NN.200")
 # Instalar Internet Information Services (IIS)
-#Install-WindowsFeature -Name Web-Server -IncludeAllSubFeature -IncludeManagementTools 
+#Install-WindowsFeature -Name Web-Server -IncludeManagementTools  # -IncludeAllSubFeature
 </powershell>

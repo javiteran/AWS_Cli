@@ -32,10 +32,10 @@ Creará:
 * La tabla de enrutamiento de la subred para permitir conectarse a internet
 * Un grupo de seguridad para Ubuntu y otro para Windows.
 * Se abrirán los puertos 80, 22 y 3389 para Ubuntu y Windows respectivamente. (y el 53 para DNS como práctica inicial tanto en IPv4 como en IPv6)
-* Se permitirá todo el tráfico entre las instancias de la VPC.
+* Se permitirá todo el tráfico entre las instancias de la VPC
 * Una instancia EC2 con Windows Server 2022 
 * Una instancia EC2 con Ubuntu Server 24.04
-* En Ubuntu y Windows se instalarán servicios y roles como DNS para probar la instalación en la creación.
+* En Ubuntu y Windows se instalarán servicios y roles como DNS para probar la instalación en la creación
 * Direcciones IPv4s e IPv6s públicas para las instancias EC2
 
 ## Hacer lo mismo con IPv4 e IPv6 pero con un parámetro de entrada que será el NN del alumno
@@ -60,3 +60,8 @@ sh 00AWSLab01_IPv4.sh 15
 
 Puedes buscar documentación para hacer los mismo con python3 en la siguiente web.
 https://boto3.amazonaws.com/v1/documentation/api/latest/guide/examples.html
+
+
+## Microsoft Visio de la tarea
+
+En la carpeta MicrosoftVisio se encuentra el fichero de la tarea para poder editarlo o modificarlo.
