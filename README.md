@@ -45,7 +45,15 @@ git clone https://github.com/javiteran/AWS_Cli.git
 cd AWS_Cli
 sh 00AWSLab01.sh 15 
 ```
+# :trident: AWS Academy y AWS Cloudformation
 
+Si prefieres utilizar AWS cloudformation para el AWS Academy también puedes utilizar el repositorio:
+
+https://github.com/javiteran/AWS_CloudFormation
+
+Utiliza las pilas de AWS Cloudformation para la creación, actualización y borrado de entornos en AWS.
+
+![AWS_Academy_Cloudformation.PNG](imagenes/AWS_Academy_Cloudformation.PNG)
 
 ## Hacer lo mismo con Python3 y Boto3
 
