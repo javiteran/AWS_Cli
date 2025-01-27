@@ -1,8 +1,8 @@
 ###############################################################################
 #       Creación de una VPC, subredes, 
-#       internet gateway y tabla de rutas
+#       internet gateway y tabla de rutas con IPv4 e IPv6
 #      Además creará :
-#            - una instancia EC2 Ubuntu Server 22.04
+#            - una instancia EC2 Ubuntu Server 24.04
 #            - una instancia EC2 Windows Server 2022
 #      con IPs elásticas
 #      en AWS con AWS CLI
@@ -11,21 +11,23 @@
 #
 # Autor: Javier Terán González
 # Fecha: 22/10/2022
+#                 26/11/2024. Cambiar AMIs de Ubuntu y Windows y actualizar año del proyecto y añadir IPv6	
 ###############################################################################
 ## Definición de variables
 
 ##Variable a cambiar. Podría ser un parámetro de entrada. Pon tu número de alumno
 NN=30
 ###############################################################################
-AWS_VPC_CIDR_BLOCK=10.22.0.0/16
-AWS_Subred_CIDR_BLOCK=10.22.1$NN.0/24
-AWS_IP_UbuntuServer=10.22.1$NN.100
-AWS_IP_WindowsServer=10.22.1$NN.200
+# Datos IPv4
+AWS_VPC_CIDR_BLOCK=10.24.0.0/16
+AWS_Subred_CIDR_BLOCK=10.24.1$NN.0/24
+AWS_IP_UbuntuServer=10.24.1$NN.100
+AWS_IP_WindowsServer=10.24.1$NN.200
 AWS_Proyecto=SRI$NN
 
 echo "######################################################################"
 echo "Creación de una VPC, subredes, internet gateway y tabla de rutas."
-echo "Además creará una instancia EC2 Ubuntu Server 22.04 y una instancia EC2 Windows Server 2022 con IPs elásticas en AWS con AWS CLI"
+echo "Además creará una instancia EC2 Ubuntu Server 24.04 y una instancia EC2 Windows Server 2022 con IPs elásticas en AWS con AWS CLI"
 echo "Se van a crear con los siguientes valores:"
 echo "Alumno:                " $NN
 echo "AWS_VPC_CIDR_BLOCK:    " $AWS_VPC_CIDR_BLOCK
@@ -48,6 +50,14 @@ AWS_ID_VPC=$(aws ec2 create-vpc \
   --query 'Vpc.{VpcId:VpcId}' \
   --output text)
 
+AWS_IPV6_CIDR_BLOCK=$(aws ec2 describe-vpcs \
+  --vpc-ids $AWS_ID_VPC \
+  --query 'Vpcs[0].Ipv6CidrBlockAssociationSet[0].Ipv6CidrBlock' \
+  --output text)
+echo $AWS_IPV6_CIDR_BLOCK
+AWS_IPV6_CIDR=$(echo $AWS_IPV6_CIDR_BLOCK | cut -d "/" -f 1)/64
+echo $AWS_IPV6_CIDR
+
 ## Habilitar los nombres DNS para la VPC
 aws ec2 modify-vpc-attribute \
   --vpc-id $AWS_ID_VPC \
@@ -57,6 +67,7 @@ aws ec2 modify-vpc-attribute \
 echo "Creando Subred..."
 AWS_ID_SubredPublica=$(aws ec2 create-subnet \
   --vpc-id $AWS_ID_VPC --cidr-block $AWS_Subred_CIDR_BLOCK \
+  --ipv6-cidr-block $AWS_IPV6_CIDR \
   --availability-zone us-east-1a \
   --tag-specifications ResourceType=subnet,Tags=[{Key=Name,Value=$AWS_Proyecto-subred-publica}] \
   --query 'Subnet.{SubnetId:SubnetId}' \
@@ -157,6 +168,23 @@ aws ec2 authorize-security-group-ingress \
   --group-id $AWS_ID_GrupoSeguridad_Ubuntu \
   --ip-permissions '[{"IpProtocol": "UDP", "FromPort": 53, "ToPort": 53, "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow DNS(UDP)"}]}]'
 
+aws ec2 authorize-security-group-ingress \
+  --group-id $AWS_ID_GrupoSeguridad_Ubuntu \
+  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 22, "ToPort": 22, "Ipv6Ranges": [{"CidrIpv6": "::/0", "Description": "Allow SSH IPv6"}]}]'
+
+aws ec2 authorize-security-group-ingress \
+  --group-id $AWS_ID_GrupoSeguridad_Ubuntu \
+  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 80, "ToPort": 80, "Ipv6Ranges": [{"CidrIpv6": "::/0", "Description": "Allow HTTP IPv6"}]}]'
+
+aws ec2 authorize-security-group-ingress \
+  --group-id $AWS_ID_GrupoSeguridad_Ubuntu \
+  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 53, "ToPort": 53, "Ipv6Ranges": [{"CidrIpv6": "::/0", "Description": "Allow DNS(TCP) IPv6"}]}]'
+
+aws ec2 authorize-security-group-ingress \
+  --group-id $AWS_ID_GrupoSeguridad_Ubuntu \
+  --ip-permissions '[{"IpProtocol": "UDP", "FromPort": 53, "ToPort": 53, "Ipv6Ranges": [{"CidrIpv6": "::/0", "Description": "Allow DNS(UDP) IPv6"}]}]'
+
+
 ## Añadirle etiqueta al grupo de seguridad
 echo "Añadiendo etiqueta al grupo de seguridad Ubuntu Server..."
 aws ec2 create-tags \
@@ -164,15 +192,16 @@ aws ec2 create-tags \
 --tags "Key=Name,Value=$AWS_Proyecto-us-sg" 
 
 ###############################################################################
-## Crear una instancia EC2  (con una imagen de ubuntu 22.04 del 08/11/2023)
+## Crear una instancia EC2  (con una imagen de ubuntu 24.04 del 08/11/2023)
 echo ""
 echo "Creando instancia EC2 Ubuntu  ##################################"
-AWS_AMI_Ubuntu_ID=ami-ami-0fc5d935ebf8bc3bc
+AWS_AMI_Ubuntu_ID=ami-0866a3c8686eaeeba
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Ubuntu_ID \
   --instance-type t2.micro \
   --key-name vockey \
   --monitoring "Enabled=false" \
+  --ipv6-address-count 1 \
   --security-group-ids $AWS_ID_GrupoSeguridad_Ubuntu \
   --subnet-id $AWS_ID_SubredPublica \
   --user-data file://datosusuarioUbuntu.txt \
@@ -243,6 +272,22 @@ aws ec2 authorize-security-group-ingress \
   --group-id $AWS_ID_GrupoSeguridad_Windows \
   --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 80,   "ToPort": 80,   "IpRanges": [{"CidrIp": "0.0.0.0/0", "Description": "Allow HTTP"}]}]'
 
+aws ec2 authorize-security-group-ingress \
+  --group-id $AWS_ID_GrupoSeguridad_Windows \
+  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 3389, "ToPort": 3389, "Ipv6Ranges": [{"CidrIpv6": "::/0", "Description": "Allow RDP IPv6"}]}]'
+
+aws ec2 authorize-security-group-ingress \
+  --group-id $AWS_ID_GrupoSeguridad_Windows \
+  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 80, "ToPort": 80, "Ipv6Ranges": [{"CidrIpv6": "::/0", "Description": "Allow HTTP IPv6"}]}]'
+
+aws ec2 authorize-security-group-ingress \
+  --group-id $AWS_ID_GrupoSeguridad_Windows \
+  --ip-permissions '[{"IpProtocol": "tcp", "FromPort": 53, "ToPort": 53, "Ipv6Ranges": [{"CidrIpv6": "::/0", "Description": "Allow DNS(TCP) IPv6"}]}]'
+
+aws ec2 authorize-security-group-ingress \
+  --group-id $AWS_ID_GrupoSeguridad_Windows \
+  --ip-permissions '[{"IpProtocol": "UDP", "FromPort": 53, "ToPort": 53, "Ipv6Ranges": [{"CidrIpv6": "::/0", "Description": "Allow DNS(UDP) IPv6"}]}]'
+
 
 ## Añadirle etiqueta al grupo de seguridad
 echo "Añadiendo etiqueta al grupo de seguridad Windows Server..."
@@ -254,12 +299,13 @@ aws ec2 create-tags \
 ## Crear una instancia EC2  (con una imagen de Windows Server 2022 del 08/11/2023)
 echo ""
 echo "Creando instancia EC2 Windows  ##################################"
-AWS_AMI_Windows_ID=ami-005f8adf84f8c5057
+AWS_AMI_Windows_ID=ami-015f002db921fbf07
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Windows_ID \
   --instance-type t2.micro \
   --key-name vockey \
   --monitoring "Enabled=false" \
+  --ipv6-address-count 1 \
   --security-group-ids $AWS_ID_GrupoSeguridad_Windows \
   --subnet-id $AWS_ID_SubredPublica \
   --user-data file://datosusuarioWindows.txt \
@@ -312,4 +358,9 @@ AWS_EC2_INSTANCE_PUBLIC_IP=$(aws ec2 describe-instances \
 --query "Reservations[*].Instances[*].PublicIpAddress" \
 --output=text) &&
 echo $AWS_EC2_INSTANCE_PUBLIC_IP
+
+AWS_EC2_INSTANCE_IPV6=$(aws ec2 describe-instances \
+--query "Reservations[*].Instances[*].NetworkInterfaces[*].Ipv6Addresses[0].Ipv6Address" \
+--output text)
+echo $AWS_EC2_INSTANCE_IPV6
 ###############################################################################

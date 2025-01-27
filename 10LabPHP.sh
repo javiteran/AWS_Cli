@@ -33,11 +33,11 @@ fi
 NN=$1
 echo "Alumno: " $NN;
 ###############################################################################
-AWS_VPC_CIDR_BLOCK=10.22.0.0/16
-AWS_Subred1_CIDR_BLOCK=10.22.1$NN.0/24
-AWS_Subred2_CIDR_BLOCK=10.22.2$NN.0/24
-AWS_IP_UbuntuServer1=10.22.1$NN.100
-AWS_IP_UbuntuServer2=10.22.2$NN.100
+AWS_VPC_CIDR_BLOCK=10.24.0.0/16
+AWS_Subred1_CIDR_BLOCK=10.24.1$NN.0/24
+AWS_Subred2_CIDR_BLOCK=10.24.2$NN.0/24
+AWS_IP_UbuntuServer1=10.24.1$NN.100
+AWS_IP_UbuntuServer2=10.24.2$NN.100
 AWS_Proyecto=g6PHP$NN
 
 echo "######################################################################"
