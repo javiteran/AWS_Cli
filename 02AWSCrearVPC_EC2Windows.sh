@@ -134,7 +134,7 @@ echo "Creando instancia EC2 Windows"
 AWS_AMI_Windows_ID=ami-005f8adf84f8c5057
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Windows_ID \
-  --instance-type t3.medium
+  --instance-type t3.medium \
   --key-name vockey \
   --monitoring "Enabled=false" \
   --security-group-ids $AWS_CUSTOM_SECURITY_GROUP_ID \

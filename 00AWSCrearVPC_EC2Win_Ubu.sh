@@ -50,7 +50,9 @@ AWS_ID_VPC=$(aws ec2 create-vpc \
   --tag-specification ResourceType=vpc,Tags=[{Key=Name,Value=$AWS_Proyecto-vpc}] \
   --query 'Vpc.{VpcId:VpcId}' \
   --output text)
+echo "ID VPC: " $AWS_ID_VPC
 
+## Obtener el bloque IPv6 asignado a la VPC
 AWS_IPV6_CIDR_BLOCK=$(aws ec2 describe-vpcs \
   --vpc-ids $AWS_ID_VPC \
   --query 'Vpcs[0].Ipv6CidrBlockAssociationSet[0].Ipv6CidrBlock' \
@@ -303,7 +305,7 @@ echo "Creando instancia EC2 Windows  ##################################"
 AWS_AMI_Windows_ID=ami-0159172a5a821bafd
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Windows_ID \
-  --instance-type t3.medium
+  --instance-type t3.medium \
   --key-name vockey \
   --monitoring "Enabled=false" \
   --ipv6-address-count 1 \
