@@ -303,7 +303,7 @@ echo "Creando instancia EC2 Windows  ##################################"
 AWS_AMI_Windows_ID=ami-0159172a5a821bafd
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Windows_ID \
-  --instance-type t2.micro \
+  --instance-type t3.medium
   --key-name vockey \
   --monitoring "Enabled=false" \
   --ipv6-address-count 1 \
