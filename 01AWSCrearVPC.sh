@@ -7,13 +7,14 @@
 #
 # Autor: Javier Terán González
 # Fecha: 18/10/2022
+#        14/11/2025. Cambiar AMIs de Ubuntu y Windows
 ###########################################################
 
 ## Definición de variables
-AWS_VPC_CIDR_BLOCK=10.24.0.0/16
-AWS_Subred_CIDR_BLOCK=10.24.130.0/24
-AWS_IP_UbuntuServer=10.24.130.100
-AWS_IP_WindowsServer=10.24.130.200
+AWS_VPC_CIDR_BLOCK=10.25.0.0/16
+AWS_Subred_CIDR_BLOCK=10.25.130.0/24
+AWS_IP_UbuntuServer=10.25.130.100
+AWS_IP_WindowsServer=10.25.130.200
 
 ###########################################################
 ## Crear una VPC (Virtual Private Cloud) con su etiqueta
@@ -118,9 +119,9 @@ aws ec2 create-tags \
 --tags "Key=Name,Value=SRINNus-sg" 
 
 ###########################################################
-## Crear una instancia EC2  (con una imagen de ubuntu 22.04 del 04/07/2022)
+## Crear una instancia EC2  (con una imagen de ubuntu 24.04)
 echo "Creando instancia EC2 Ubuntu"
-AWS_AMI_Ubuntu_ID=ami-052efd3df9dad4825
+AWS_AMI_Ubuntu_ID=ami-0ecb62995f68bb549
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Ubuntu_ID \
   --instance-type t2.micro \

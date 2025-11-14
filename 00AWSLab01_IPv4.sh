@@ -10,10 +10,11 @@
 # Utilizado para AWS Academy Learning Lab
 #
 # Autor: Javier Terán González
-# Fecha: 06/12/2022
+# Fecha: 06/12/2025
 # Versión: 1.34
 # Modificaciones: 03/10/2023. Cambiar AMIs de Ubuntu y Windows y añadir el año al proyecto
 #                 26/11/2024. Cambiar AMIs de Ubuntu y Windows y actualizar año del proyecto
+#        14/11/2025. Cambiar AMIs de Ubuntu y Windows
 ###############################################################################
 ## Tratamiento de variables de entrada
 
@@ -34,10 +35,10 @@ NN=$1
 echo "Alumno: " $NN;
 ###############################################################################
 # Datos IPv4
-AWS_VPC_CIDR_BLOCK=10.24.0.0/16
-AWS_Subred_CIDR_BLOCK=10.24.1$NN.0/24
-AWS_IP_UbuntuServer=10.24.1$NN.100
-AWS_IP_WindowsServer=10.24.1$NN.200
+AWS_VPC_CIDR_BLOCK=10.25.0.0/16
+AWS_Subred_CIDR_BLOCK=10.25.1$NN.0/24
+AWS_IP_UbuntuServer=10.25.1$NN.100
+AWS_IP_WindowsServer=10.25.1$NN.200
 AWS_Proyecto=SRI24$NN
 
 echo "######################################################################"
@@ -184,7 +185,7 @@ aws ec2 create-tags \
 ## Crear una instancia EC2  (con una imagen de ubuntu 24.04)
 echo ""
 echo "Creando instancia EC2 Ubuntu  ##################################"
-AWS_AMI_Ubuntu_ID=ami-0866a3c8686eaeeba
+AWS_AMI_Ubuntu_ID=ami-0ecb62995f68bb549
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Ubuntu_ID \
   --instance-type t2.micro \
@@ -271,7 +272,7 @@ aws ec2 create-tags \
 ## Crear una instancia EC2  (con una imagen de Windows Server 2022)
 echo ""
 echo "Creando instancia EC2 Windows  ##################################"
-AWS_AMI_Windows_ID=ami-015f002db921fbf07
+AWS_AMI_Windows_ID=ami-0159172a5a821bafd
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Windows_ID \
   --instance-type t2.micro \

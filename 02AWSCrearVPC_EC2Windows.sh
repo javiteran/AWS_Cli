@@ -8,14 +8,14 @@
 # Utilizado para AWS Academy Learning Lab
 #
 # Autor: Javier Terán González
-# Fecha: 22/10/2022
+# Fecha: 22/10/2025
 ###########################################################
 
 ## Definición de variables
-AWS_VPC_CIDR_BLOCK=10.24.0.0/16
-AWS_Subred_CIDR_BLOCK=10.24.130.0/24
-AWS_IP_UbuntuServer=10.24.130.100
-AWS_IP_WindowsServer=10.24.130.200
+AWS_VPC_CIDR_BLOCK=10.25.0.0/16
+AWS_Subred_CIDR_BLOCK=10.25.130.0/24
+AWS_IP_UbuntuServer=10.25.130.100
+AWS_IP_WindowsServer=10.25.130.200
 
 ###########################################################
 ## Crear una VPC (Virtual Private Cloud) con su etiqueta
@@ -129,7 +129,7 @@ aws ec2 create-tags \
 --tags "Key=Name,Value=SRINNws-sg" 
 
 ###########################################################
-## Crear una instancia EC2  (con una imagen de Windows 22.04 del 22/10/2023)
+## Crear una instancia EC2  (con una imagen de Windows 24.04)
 echo "Creando instancia EC2 Windows"
 AWS_AMI_Windows_ID=ami-005f8adf84f8c5057
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
