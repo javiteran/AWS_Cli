@@ -316,7 +316,7 @@ aws ec2 create-tags \
 ## Crear una instancia EC2 con dirección IPv6 (con una imagen de Windows Server 2022)
 echo ""
 echo "Creando instancia EC2 Windows  ##################################"
-AWS_AMI_Windows_ID=ami-0159172a5a821bafd
+AWS_AMI_Windows_ID=ami-05856bd26dd466893
 sed -i "s/NN/$NN/g"            ./datosusuarioWindows.txt
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Windows_ID \
