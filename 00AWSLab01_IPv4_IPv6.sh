@@ -80,19 +80,19 @@ aws ec2 modify-vpc-attribute \
   --vpc-id $AWS_ID_VPC \
   --enable-dns-hostnames "{\"Value\":true}"
 
-## Crear una subred publica con su etiqueta
-echo "Creando Subred..."
-AWS_ID_SubredPublica=$(aws ec2 create-subnet \
+## Crear una subred pública 1 con su etiqueta
+echo "Creando Subred Pública 1..."
+AWS_ID_SubredPublica1=$(aws ec2 create-subnet \
   --vpc-id $AWS_ID_VPC --cidr-block $AWS_Subred_CIDR_BLOCK \
   --ipv6-cidr-block $AWS_IPV6_CIDR \
   --availability-zone us-east-1a \
-  --tag-specifications ResourceType=subnet,Tags=[{Key=Name,Value=$AWS_Proyecto-subred-publica}] \
+  --tag-specifications ResourceType=subnet,Tags=[{Key=Name,Value=$AWS_Proyecto-subred-publica-1}] \
   --query 'Subnet.{SubnetId:SubnetId}' \
   --output text)
 
-## Habilitar la asignación automática de IPs públicas en la subred pública
+## Habilitar la asignación automática de IPs públicas en la subred pública 1
 aws ec2 modify-subnet-attribute \
-  --subnet-id $AWS_ID_SubredPublica \
+  --subnet-id $AWS_ID_SubredPublica1 \
   --map-public-ip-on-launch
 
 ## Crear un Internet Gateway (Puerta de enlace) con su etiqueta
@@ -127,9 +127,9 @@ aws ec2 create-route --route-table-id  $AWS_ID_TablaRutas \
   --destination-ipv6-cidr-block ::/0 \
   --gateway-id $AWS_ID_InternetGateway
 
-## Asociar la subred pública con la tabla de rutas
+## Asociar la subred pública 1 con la tabla de rutas
 AWS_ROUTE_TABLE_ASSOID=$(aws ec2 associate-route-table  \
-  --subnet-id $AWS_ID_SubredPublica \
+  --subnet-id $AWS_ID_SubredPublica1 \
   --route-table-id $AWS_ID_TablaRutas \
   --output text)
 
@@ -212,7 +212,7 @@ aws ec2 create-tags \
 ## Crear una instancia EC2 con dirección IPv6 (con una imagen de ubuntu 24.04)
 echo ""
 echo "Creando instancia EC2 Ubuntu  ##################################"
-AWS_AMI_Ubuntu_ID=ami-0ecb62995f68bb549
+AWS_AMI_Ubuntu_ID=ami-0b6d9d3d33ba97d99
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Ubuntu_ID \
   --instance-type t2.micro \
@@ -220,7 +220,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --monitoring "Enabled=false" \
   --ipv6-address-count 1 \
   --security-group-ids $AWS_ID_GrupoSeguridad_Ubuntu \
-  --subnet-id $AWS_ID_SubredPublica \
+  --subnet-id $AWS_ID_SubredPublica1 \
   --user-data file://datosusuarioUbuntu.txt \
   --private-ip-address $AWS_IP_UbuntuServer \
   --tag-specifications ResourceType=instance,Tags=[{Key=Name,Value=$AWS_Proyecto-us}] \
@@ -316,7 +316,7 @@ aws ec2 create-tags \
 ## Crear una instancia EC2 con dirección IPv6 (con una imagen de Windows Server 2022)
 echo ""
 echo "Creando instancia EC2 Windows  ##################################"
-AWS_AMI_Windows_ID=ami-0159172a5a821bafd
+AWS_AMI_Windows_ID=ami-0ed58a129008c2cc2
 sed -i "s/NN/$NN/g"            ./datosusuarioWindows.txt
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Windows_ID \
@@ -325,7 +325,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --monitoring "Enabled=false" \
   --ipv6-address-count 1 \
   --security-group-ids $AWS_ID_GrupoSeguridad_Windows \
-  --subnet-id $AWS_ID_SubredPublica \
+  --subnet-id $AWS_ID_SubredPublica1 \
   --user-data file://datosusuarioWindows.txt \
   --private-ip-address $AWS_IP_WindowsServer \
   --tag-specifications ResourceType=instance,Tags=[{Key=Name,Value=$AWS_Proyecto-ws}] \

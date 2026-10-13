@@ -76,18 +76,18 @@ aws ec2 modify-vpc-attribute \
   --vpc-id $AWS_ID_VPC \
   --enable-dns-hostnames "{\"Value\":true}"
 
-## Crear subredes publicas con su etiqueta
-echo "Creando Subredes..."
+## Crear las subredes públicas 1 y 2 con su etiqueta
+echo "Creando Subredes Públicas 1 y 2..."
 AWS_ID_SubredPublica1=$(aws ec2 create-subnet \
   --vpc-id $AWS_ID_VPC --cidr-block $AWS_Subred1_CIDR_BLOCK \
   --availability-zone us-east-1a \
-  --tag-specifications ResourceType=subnet,Tags=[{Key=Name,Value=$AWS_Proyecto-subred-publica1}] \
+  --tag-specifications ResourceType=subnet,Tags=[{Key=Name,Value=$AWS_Proyecto-subred-publica-1}] \
   --query 'Subnet.{SubnetId:SubnetId}' \
   --output text)
 AWS_ID_SubredPublica2=$(aws ec2 create-subnet \
   --vpc-id $AWS_ID_VPC --cidr-block $AWS_Subred2_CIDR_BLOCK \
   --availability-zone us-east-1b \
-  --tag-specifications ResourceType=subnet,Tags=[{Key=Name,Value=$AWS_Proyecto-subred-publica2}] \
+  --tag-specifications ResourceType=subnet,Tags=[{Key=Name,Value=$AWS_Proyecto-subred-publica-2}] \
   --query 'Subnet.{SubnetId:SubnetId}' \
   --output text)
 

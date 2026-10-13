@@ -27,9 +27,9 @@ Con este fichero se creará el siguiente entorno de tareas:
 Creará:
 
 * Una VPC con IPv4 e IPv6
-* Una subred pública
+* Una subred pública 1
 * Una puerta de enlace de internet
-* La tabla de enrutamiento de la subred para permitir conectarse a internet
+* La tabla de enrutamiento de la subred pública 1 para permitir conectarse a internet
 * Un grupo de seguridad para Ubuntu y otro para Windows.
 * Se abrirán los puertos 80, 22 y 3389 para Ubuntu y Windows respectivamente. (y el 53 para DNS como práctica inicial tanto en IPv4 como en IPv6)
 * Se permitirá todo el tráfico entre las instancias de la VPC
