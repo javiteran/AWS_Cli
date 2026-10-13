@@ -36,49 +36,22 @@ fi
 NN=$1
 echo "Alumno: " $NN;
 
-aws_ipv6_second_subnet_cidr() {
-    local cidr=${1%/*}
-    local prefix=${1##*/}
-    local left right missing value i group
-    local -a left_groups right_groups groups
-
-    [[ "$prefix" == 56 ]] || return 1
-    if [[ "$cidr" == *::* ]]; then
-        left=${cidr%%::*}
-        right=${cidr#*::}
-        if [[ -n "$left" ]]; then IFS=: read -r -a left_groups <<< "$left"; fi
-        if [[ -n "$right" ]]; then IFS=: read -r -a right_groups <<< "$right"; fi
-        missing=$((8 - ${#left_groups[@]} - ${#right_groups[@]}))
-        (( missing >= 1 )) || return 1
-        for group in "${left_groups[@]}"; do groups+=("$group"); done
-        for ((i = 0; i < missing; i++)); do groups+=("0"); done
-        for group in "${right_groups[@]}"; do groups+=("$group"); done
-    else
-        IFS=: read -r -a groups <<< "$cidr"
-    fi
-
-    [[ ${#groups[@]} -eq 8 ]] || return 1
-    value=$((16#${groups[3]}))
-    (( (value & 255) < 255 )) || return 1
-    value=$(( (value & 0xff00) | ((value + 1) & 0xff) ))
-    printf '%s:%s:%s:%04x::/64\n' "${groups[0]}" "${groups[1]}" "${groups[2]}" "$value"
-}
 ###############################################################################
 # Datos IPv4
 AWS_VPC_CIDR_BLOCK=10.26.0.0/16
-AWS_Subred_CIDR_BLOCK=10.26.1$NN.0/24
-AWS_Subred2_CIDR_BLOCK=10.26.$((10#$NN)).0/24
+AWS_Subred1_CIDR_BLOCK=10.26.1$NN.0/24
+AWS_Subred2_CIDR_BLOCK=10.26.2$NN.0/24
 AWS_IP_UbuntuServer=10.26.1$NN.100
-AWS_IP_WindowsServer=10.26.1$NN.200
+AWS_IP_WindowsServer=10.26.1$NN.100
 AWS_Proyecto=SRI26$NN
 
 echo "######################################################################"
 echo "Creación de una VPC, subredes, internet gateway y tabla de rutas."
-echo "Además creará una instancia EC2 Ubuntu Server 24.04 y una instancia EC2 Windows Server 2022 con IPs elásticas en AWS con AWS CLI"
+echo "Además creará una instancia EC2 Ubuntu Server 26.04 y una instancia EC2 Windows Server 2022 con IPs elásticas en AWS con AWS CLI"
 echo "Se van a crear con los siguientes valores:"
 echo "Alumno:                " $NN
 echo "AWS_VPC_CIDR_BLOCK:    " $AWS_VPC_CIDR_BLOCK
-echo "AWS_Subred_CIDR_BLOCK: " $AWS_Subred_CIDR_BLOCK
+echo "AWS_Subred1_CIDR_BLOCK: " $AWS_Subred1_CIDR_BLOCK
 echo "AWS_Subred2_CIDR_BLOCK:" $AWS_Subred2_CIDR_BLOCK
 echo "AWS_IP_UbuntuServer:   " $AWS_IP_UbuntuServer
 echo "AWS_IP_WindowsServer:  " $AWS_IP_WindowsServer
@@ -103,13 +76,11 @@ AWS_IPV6_CIDR_BLOCK=$(aws ec2 describe-vpcs \
   --query 'Vpcs[0].Ipv6CidrBlockAssociationSet[0].Ipv6CidrBlock' \
   --output text)
 echo $AWS_IPV6_CIDR_BLOCK
-AWS_IPV6_CIDR=$(echo $AWS_IPV6_CIDR_BLOCK | cut -d "/" -f 1)/64
-AWS_IPV6_CIDR_2=$(aws_ipv6_second_subnet_cidr "$AWS_IPV6_CIDR_BLOCK") || {
-  echo "No se pudo calcular el bloque IPv6 para la subred pública 2." >&2
-  exit 1
-}
-echo $AWS_IPV6_CIDR
-echo $AWS_IPV6_CIDR_2
+## Bloques IPv6 /64 de las subredes (si la VPC es xxxx:xxxx:xxxx:1200::/56 -> 1201::/64 y 1202::/64)
+AWS_Subred1_IPV6_CIDR=$(echo $AWS_IPV6_CIDR_BLOCK | sed 's|00::/56|01::/64|')
+AWS_Subred2_IPV6_CIDR=$(echo $AWS_IPV6_CIDR_BLOCK | sed 's|00::/56|02::/64|')
+echo $AWS_Subred1_IPV6_CIDR
+echo $AWS_Subred2_IPV6_CIDR
 
 ## Habilitar los nombres DNS para la VPC
 aws ec2 modify-vpc-attribute \
@@ -119,8 +90,8 @@ aws ec2 modify-vpc-attribute \
 ## Crear una subred pública 1 con su etiqueta
 echo "Creando Subred Pública 1..."
 AWS_ID_SubredPublica1=$(aws ec2 create-subnet \
-  --vpc-id $AWS_ID_VPC --cidr-block $AWS_Subred_CIDR_BLOCK \
-  --ipv6-cidr-block $AWS_IPV6_CIDR \
+  --vpc-id $AWS_ID_VPC --cidr-block $AWS_Subred1_CIDR_BLOCK \
+  --ipv6-cidr-block $AWS_Subred1_IPV6_CIDR  \
   --availability-zone us-east-1a \
   --tag-specifications ResourceType=subnet,Tags=[{Key=Name,Value=$AWS_Proyecto-subred-publica-1}] \
   --query 'Subnet.{SubnetId:SubnetId}' \
@@ -135,7 +106,7 @@ aws ec2 modify-subnet-attribute \
 echo "Creando Subred Pública 2..."
 AWS_ID_SubredPublica2=$(aws ec2 create-subnet \
   --vpc-id $AWS_ID_VPC --cidr-block $AWS_Subred2_CIDR_BLOCK \
-  --ipv6-cidr-block $AWS_IPV6_CIDR_2 \
+  --ipv6-cidr-block $AWS_Subred2_IPV6_CIDR  \
   --availability-zone us-east-1b \
   --tag-specifications ResourceType=subnet,Tags=[{Key=Name,Value=$AWS_Proyecto-subred-publica-2}] \
   --query 'Subnet.{SubnetId:SubnetId}' \
