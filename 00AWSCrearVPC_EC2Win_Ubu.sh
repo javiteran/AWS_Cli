@@ -149,7 +149,7 @@ AWS_ID_GrupoSeguridad_Ubuntu=$(aws ec2 create-security-group \
   --vpc-id $AWS_ID_VPC \
   --group-name $AWS_Proyecto-us-sg \
   --description "$AWS_Proyecto-us-sg" \
-  --output text)
+  --output text | awk '{print $1}')
 
 echo "ID Grupo de seguridad de ubuntu: " $AWS_ID_GrupoSeguridad_Ubuntu
 
@@ -253,7 +253,7 @@ AWS_ID_GrupoSeguridad_Windows=$(aws ec2 create-security-group \
   --vpc-id $AWS_ID_VPC \
   --group-name $AWS_Proyecto-ws-sg \
   --description "$AWS_Proyecto-ws-sg" \
-  --output text)
+  --output text | awk '{print $1}')
 
 echo "ID Grupo de seguridad de windows: " $AWS_ID_GrupoSeguridad_Windows
 

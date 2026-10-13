@@ -4,7 +4,7 @@ sg=$(aws ec2 create-security-group \
   --group-name SRINN-sg \
   --tag-specifications 'ResourceType=security-group,Tags=[{Key='Name',Value='SRINN-sg'}]' \
   --description 'Grupo de seguridad SRINN-sg' \
-  --output text)
+  --output text | awk '{print $1}')
 
 echo $sg
 AWS_sg_Id=$(echo $sg | awk '{print $1}')
