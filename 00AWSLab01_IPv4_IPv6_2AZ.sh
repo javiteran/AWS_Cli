@@ -42,7 +42,7 @@ AWS_VPC_CIDR_BLOCK=10.26.0.0/16
 AWS_Subred1_CIDR_BLOCK=10.26.1$NN.0/24
 AWS_Subred2_CIDR_BLOCK=10.26.2$NN.0/24
 AWS_IP_UbuntuServer=10.26.1$NN.100
-AWS_IP_WindowsServer=10.26.1$NN.100
+AWS_IP_WindowsServer=10.26.2$NN.100
 AWS_Proyecto=SRI26$NN
 
 echo "######################################################################"
@@ -51,7 +51,7 @@ echo "Además creará una instancia EC2 Ubuntu Server 26.04 y una instancia EC2 
 echo "Se van a crear con los siguientes valores:"
 echo "Alumno:                " $NN
 echo "AWS_VPC_CIDR_BLOCK:    " $AWS_VPC_CIDR_BLOCK
-echo "AWS_Subred1_CIDR_BLOCK: " $AWS_Subred1_CIDR_BLOCK
+echo "AWS_Subred1_CIDR_BLOCK:" $AWS_Subred1_CIDR_BLOCK
 echo "AWS_Subred2_CIDR_BLOCK:" $AWS_Subred2_CIDR_BLOCK
 echo "AWS_IP_UbuntuServer:   " $AWS_IP_UbuntuServer
 echo "AWS_IP_WindowsServer:  " $AWS_IP_WindowsServer
