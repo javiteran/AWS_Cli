@@ -20,10 +20,10 @@
 NN=30
 ###############################################################################
 # Datos IPv4
-AWS_VPC_CIDR_BLOCK=10.25.0.0/16
-AWS_Subred_CIDR_BLOCK=10.25.1$NN.0/24
-AWS_IP_UbuntuServer=10.25.1$NN.100
-AWS_IP_WindowsServer=10.25.1$NN.200
+AWS_VPC_CIDR_BLOCK=10.26.0.0/16
+AWS_Subred_CIDR_BLOCK=10.26.1$NN.0/24
+AWS_IP_UbuntuServer=10.26.1$NN.100
+AWS_IP_WindowsServer=10.26.1$NN.200
 AWS_Proyecto=SRI$NN
 
 echo "######################################################################"
@@ -198,7 +198,7 @@ aws ec2 create-tags \
 ## Crear una instancia EC2 con una imagen de ubuntu 24.04)
 echo ""
 echo "Creando instancia EC2 Ubuntu  ##################################"
-AWS_AMI_Ubuntu_ID=ami-0ecb62995f68bb549
+AWS_AMI_Ubuntu_ID=ami-0b6d9d3d33ba97d99
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Ubuntu_ID \
   --instance-type t2.micro \
@@ -302,7 +302,7 @@ aws ec2 create-tags \
 ## Crear una instancia EC2  (con una imagen de Windows Server 2022)
 echo ""
 echo "Creando instancia EC2 Windows  ##################################"
-AWS_AMI_Windows_ID=ami-0159172a5a821bafd
+AWS_AMI_Windows_ID=ami-0ed58a129008c2cc2
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Windows_ID \
   --instance-type t3.medium \

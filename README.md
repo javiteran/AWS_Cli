@@ -10,6 +10,8 @@ https://awscli.amazonaws.com/v2/documentation/api/latest/reference/ec2/index.htm
 
 ## :collision: Configuración del entorno en el Learner Lab
 
+Utilizando CloudShell de AWS Academy podemos configurar el entorno de tareas para poder ejecutar los scripts de automatización.
+
 ![ConfigurarEntornoLearnerLab.PNG](imagenes/ConfigurarEntornoLearnerLab.PNG)
 
 ## :hammer: Creación de entorno de tareas 00AWSCrearVPC_EC2Win_Ubu.sh

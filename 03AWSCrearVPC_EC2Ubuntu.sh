@@ -13,10 +13,10 @@
 ###########################################################
 
 ## Definición de variables
-AWS_VPC_CIDR_BLOCK=10.25.0.0/16
-AWS_Subred_CIDR_BLOCK=10.25.130.0/24
-AWS_IP_UbuntuServer=10.25.130.100
-AWS_IP_WindowsServer=10.25.130.200
+AWS_VPC_CIDR_BLOCK=10.26.0.0/16
+AWS_Subred_CIDR_BLOCK=10.26.130.0/24
+AWS_IP_UbuntuServer=10.26.130.100
+AWS_IP_WindowsServer=10.26.130.200
 
 ###########################################################
 ## Crear una VPC (Virtual Private Cloud) con su etiqueta
@@ -124,7 +124,7 @@ aws ec2 create-tags \
 ###########################################################
 ## Crear una instancia EC2  (con una imagen de ubuntu 24.04)
 echo "Creando instancia EC2 Ubuntu"
-AWS_AMI_Ubuntu_ID=ami-0ecb62995f68bb549
+AWS_AMI_Ubuntu_ID=ami-0b6d9d3d33ba97d99
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Ubuntu_ID \
   --instance-type t2.micro \

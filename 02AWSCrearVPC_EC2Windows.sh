@@ -12,10 +12,10 @@
 ###########################################################
 
 ## Definición de variables
-AWS_VPC_CIDR_BLOCK=10.25.0.0/16
-AWS_Subred_CIDR_BLOCK=10.25.130.0/24
-AWS_IP_UbuntuServer=10.25.130.100
-AWS_IP_WindowsServer=10.25.130.200
+AWS_VPC_CIDR_BLOCK=10.26.0.0/16
+AWS_Subred_CIDR_BLOCK=10.26.130.0/24
+AWS_IP_UbuntuServer=10.26.130.100
+AWS_IP_WindowsServer=10.26.130.200
 
 ###########################################################
 ## Crear una VPC (Virtual Private Cloud) con su etiqueta
@@ -132,7 +132,7 @@ aws ec2 create-tags \
 ###########################################################
 ## Crear una instancia EC2  (con una imagen de Windows Server 2022)
 echo "Creando instancia EC2 Windows"
-AWS_AMI_Windows_ID=ami-005f8adf84f8c5057
+AWS_AMI_Windows_ID=ami-0ed58a129008c2cc2
 AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Windows_ID \
   --instance-type t3.medium \

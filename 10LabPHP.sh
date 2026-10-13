@@ -34,11 +34,11 @@ fi
 NN=$1
 echo "Alumno: " $NN;
 ###############################################################################
-AWS_VPC_CIDR_BLOCK=10.25.0.0/16
-AWS_Subred1_CIDR_BLOCK=10.25.1$NN.0/24
-AWS_Subred2_CIDR_BLOCK=10.25.2$NN.0/24
-AWS_IP_UbuntuServer1=10.25.1$NN.100
-AWS_IP_UbuntuServer2=10.25.2$NN.100
+AWS_VPC_CIDR_BLOCK=10.26.0.0/16
+AWS_Subred1_CIDR_BLOCK=10.26.1$NN.0/24
+AWS_Subred2_CIDR_BLOCK=10.26.2$NN.0/24
+AWS_IP_UbuntuServer1=10.26.1$NN.100
+AWS_IP_UbuntuServer2=10.26.2$NN.100
 AWS_Proyecto=g6PHP$NN
 
 echo "######################################################################"
@@ -199,7 +199,7 @@ aws ec2 create-tags \
 ## Crear instancia EC2 -1  (con una imagen de ubuntu 24.04)
 echo ""
 echo "Creando instancia EC2 Ubuntu  ##################################"
-AWS_AMI_Ubuntu_ID=ami-0ecb62995f68bb549
+AWS_AMI_Ubuntu_ID=ami-0b6d9d3d33ba97d99
 AWS_EC2_INSTANCE_ID1=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Ubuntu_ID \
   --instance-type t2.micro \
@@ -243,7 +243,7 @@ aws ec2 associate-address --instance-id $AWS_EC2_INSTANCE_ID1 --allocation-id $A
 ## Crear instancia EC2 -2  (con una imagen de ubuntu 24.04)
 echo ""
 echo "Creando instancia EC2 Ubuntu  ##################################"
-AWS_AMI_Ubuntu_ID=ami-0ecb62995f68bb549
+AWS_AMI_Ubuntu_ID=ami-0b6d9d3d33ba97d99
 AWS_EC2_INSTANCE_ID2=$(aws ec2 run-instances \
   --image-id $AWS_AMI_Ubuntu_ID \
   --instance-type t2.micro \

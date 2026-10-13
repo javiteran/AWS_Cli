@@ -36,11 +36,11 @@ NN=$1
 echo "Alumno: " $NN;
 ###############################################################################
 # Datos IPv4
-AWS_VPC_CIDR_BLOCK=10.25.0.0/16
-AWS_Subred_CIDR_BLOCK=10.25.1$NN.0/24
-AWS_IP_UbuntuServer=10.25.1$NN.100
-AWS_IP_WindowsServer=10.25.1$NN.200
-AWS_Proyecto=SRI25$NN
+AWS_VPC_CIDR_BLOCK=10.26.0.0/16
+AWS_Subred_CIDR_BLOCK=10.26.1$NN.0/24
+AWS_IP_UbuntuServer=10.26.1$NN.100
+AWS_IP_WindowsServer=10.26.1$NN.200
+AWS_Proyecto=SRI26$NN
 
 echo "######################################################################"
 echo "Creación de una VPC, subredes, internet gateway y tabla de rutas."
