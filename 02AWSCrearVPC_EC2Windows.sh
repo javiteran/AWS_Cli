@@ -24,7 +24,7 @@ echo "Creando VPC..."
 AWS_ID_VPC=$(aws ec2 create-vpc \
   --cidr-block $AWS_VPC_CIDR_BLOCK \
   --amazon-provided-ipv6-cidr-block \
-  --tag-specification ResourceType=vpc,Tags=[{Key=Name,Value=SRINN-vpc}] \
+  --tag-specification "ResourceType=vpc,Tags=[{Key=Name,Value=SRINN-vpc}]" \
   --query 'Vpc.{VpcId:VpcId}' \
   --output text)
 
@@ -38,7 +38,7 @@ echo "Creando Subred Pública 1..."
 AWS_ID_SubredPublica1=$(aws ec2 create-subnet \
   --vpc-id $AWS_ID_VPC --cidr-block $AWS_Subred_CIDR_BLOCK \
   --availability-zone us-east-1a \
-  --tag-specifications ResourceType=subnet,Tags=[{Key=Name,Value=SRINN-subred-publica-1}] \
+  --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=SRINN-subred-publica-1}]" \
   --query 'Subnet.{SubnetId:SubnetId}' \
   --output text)
 
@@ -49,7 +49,7 @@ aws ec2 modify-subnet-attribute \
 
 ## Crear un Internet Gateway (Puerta de enlace) con su etiqueta
 AWS_ID_InternetGateway=$(aws ec2 create-internet-gateway \
-  --tag-specifications ResourceType=internet-gateway,Tags=[{Key=Name,Value=SRINN-igw}] \
+  --tag-specifications "ResourceType=internet-gateway,Tags=[{Key=Name,Value=SRINN-igw}]" \
   --query 'InternetGateway.{InternetGatewayId:InternetGatewayId}' \
   --output text)
 

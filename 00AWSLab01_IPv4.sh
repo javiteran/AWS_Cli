@@ -62,7 +62,7 @@ echo "Creando VPC..."
 AWS_ID_VPC=$(aws ec2 create-vpc \
   --cidr-block $AWS_VPC_CIDR_BLOCK \
   --amazon-provided-ipv6-cidr-block \
-  --tag-specification ResourceType=vpc,Tags=[{Key=Name,Value=$AWS_Proyecto-vpc}] \
+  --tag-specification "ResourceType=vpc,Tags=[{Key=Name,Value=$AWS_Proyecto-vpc}]" \
   --query 'Vpc.{VpcId:VpcId}' \
   --output text)
 
@@ -76,7 +76,7 @@ echo "Creando Subred Pública 1..."
 AWS_ID_SubredPublica1=$(aws ec2 create-subnet \
   --vpc-id $AWS_ID_VPC --cidr-block $AWS_Subred_CIDR_BLOCK \
   --availability-zone us-east-1a \
-  --tag-specifications ResourceType=subnet,Tags=[{Key=Name,Value=$AWS_Proyecto-subred-publica-1}] \
+  --tag-specifications "ResourceType=subnet,Tags=[{Key=Name,Value=$AWS_Proyecto-subred-publica-1}]" \
   --query 'Subnet.{SubnetId:SubnetId}' \
   --output text)
 
@@ -88,7 +88,7 @@ aws ec2 modify-subnet-attribute \
 ## Crear un Internet Gateway (Puerta de enlace) con su etiqueta
 echo "Creando Internet Gateway..."
 AWS_ID_InternetGateway=$(aws ec2 create-internet-gateway \
-  --tag-specifications ResourceType=internet-gateway,Tags=[{Key=Name,Value=$AWS_Proyecto-igw}] \
+  --tag-specifications "ResourceType=internet-gateway,Tags=[{Key=Name,Value=$AWS_Proyecto-igw}]" \
   --query 'InternetGateway.{InternetGatewayId:InternetGatewayId}' \
   --output text)
 
@@ -195,7 +195,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --subnet-id $AWS_ID_SubredPublica1 \
   --user-data file://datosusuarioUbuntu.txt \
   --private-ip-address $AWS_IP_UbuntuServer \
-  --tag-specifications ResourceType=instance,Tags=[{Key=Name,Value=$AWS_Proyecto-us}] \
+  --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$AWS_Proyecto-us}]" \
   --query 'Instances[0].InstanceId' \
   --output text)
 
@@ -282,7 +282,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --subnet-id $AWS_ID_SubredPublica1 \
   --user-data file://datosusuarioWindows.txt \
   --private-ip-address $AWS_IP_WindowsServer \
-  --tag-specifications ResourceType=instance,Tags=[{Key=Name,Value=$AWS_Proyecto-ws}] \
+  --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$AWS_Proyecto-ws}]" \
   --query 'Instances[0].InstanceId' \
   --output text)
 
