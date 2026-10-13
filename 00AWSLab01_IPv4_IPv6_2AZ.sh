@@ -353,7 +353,7 @@ AWS_EC2_INSTANCE_ID=$(aws ec2 run-instances \
   --monitoring "Enabled=false" \
   --ipv6-address-count 1 \
   --security-group-ids $AWS_ID_GrupoSeguridad_Windows \
-  --subnet-id $AWS_ID_SubredPublica1 \
+  --subnet-id $AWS_ID_SubredPublica2 \
   --user-data file://datosusuarioWindows.txt \
   --private-ip-address $AWS_IP_WindowsServer \
   --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$AWS_Proyecto-ws}]" \
